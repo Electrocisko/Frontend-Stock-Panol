@@ -152,7 +152,7 @@ return (
           }}
         />
 
-        <button className="btn btn-success w-100" onClick={handleSubmit}>
+        <button className="btn btn btn-dark w-100" onClick={handleSubmit}>
           Crear Producto
         </button>
 
