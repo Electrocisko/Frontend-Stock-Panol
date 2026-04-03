@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { getProductos } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 export default function Productos({ token }) {
-
   const [productos, setProductos] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getProductos(token).then(setProductos);
@@ -15,16 +16,19 @@ export default function Productos({ token }) {
 
       <div className="row">
         {productos.map((p) => (
-          <div key={p.id} className="col-md-4 mb-4">
-
+          <div
+            key={p.id}
+            className="col-md-4 mb-4"
+            onClick={() => navigate(`/movimiento/${p.id}`)}
+            style={{ cursor: "pointer" }}
+          >
             <div className="card h-100 shadow-sm">
-
               {/* 🖼️ Imagen */}
               {p.urlImagen ? (
                 <img
                   src={p.urlImagen}
                   className="card-img-top"
-                  style={{ height: "200px", objectFit: "cover" }}
+                  style={{ height: "200px", objectFit: "contain" }}
                 />
               ) : (
                 <div
@@ -45,9 +49,7 @@ export default function Productos({ token }) {
                   <strong>Stock:</strong> {p.cantidad}
                 </p>
               </div>
-
             </div>
-
           </div>
         ))}
       </div>

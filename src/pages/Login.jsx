@@ -9,6 +9,7 @@ export default function Login({ setToken }) {
     const data = await login({ username, password });
 
     localStorage.setItem("token", data.token);
+    localStorage.setItem("rol", data.rol);   // 🔥 importante
     setToken(data.token);
   };
 
@@ -26,7 +27,7 @@ export default function Login({ setToken }) {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button className="btn btn-primary" onClick={handleLogin}>
+      <button className="btn btn-dark" onClick={handleLogin}>
         Ingresar
       </button>
     </div>

@@ -39,3 +39,15 @@ export const getProductos = async (token) => {
 
   return res.json();
 };
+
+export const getProductoById = async (id, token) => {
+  const res = await fetch(`${API_URL}/productos/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  console.log(res.json);
+
+  return res.json();
+};
