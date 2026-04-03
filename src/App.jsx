@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Login from "./pages/Login";
-import CrearProducto from "./pages/CrearProducto";
+import Productos from "./pages/Productos";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -9,7 +9,7 @@ function App() {
     return <Login setToken={setToken} />;
   }
 
-  return <CrearProducto token={token} />;
+  return <Productos token={token} />;
 }
 
 export default App;

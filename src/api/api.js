@@ -1,7 +1,4 @@
-
-
 const API_URL=import.meta.env.VITE_API_URL;
-
 
 export const login = async (data) => {
   const res = await fetch(`${API_URL}/usuarios/login`, {
@@ -23,6 +20,17 @@ export const crearProducto = async (data, token) => {
       "Authorization": `Bearer ${token}`
     },
     body: JSON.stringify(data)
+  });
+
+  return res.json();
+
+};
+
+export const getProductos = async (token) => {
+  const res = await fetch(`${API_URL}/productos`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
   });
 
   return res.json();

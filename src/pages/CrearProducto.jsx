@@ -12,6 +12,7 @@ export default function CrearProducto({ token }) {
   const [ubicacion, setUbicacion] = useState("");
   const [cantidad, setCantidad] = useState(0);
   const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   const fileRef = useRef();
 
@@ -51,102 +52,135 @@ export default function CrearProducto({ token }) {
     setCantidad(0);
     setFile(null);
     fileRef.current.value = "";
+    setPreview(null);
   };
 
-  console.log("ESTO"+import.meta.env.VITE_API_URL);
 
-  return (
-    <div className="container mt-5">
-      <h2>Nuevo Producto</h2>
 
-      <input
-        className="form-control mb-2"
-        placeholder="Nombre"
-        value={nombre}
-        onChange={(e) => setNombre(e.target.value)}
-      />
+return (
+  <div className="container mt-5">
+    <h2>Nuevo Producto</h2>
 
-      <input
-        className="form-control mb-2"
-        placeholder="Código"
-        value={codigo}
-        onChange={(e) => setCodigo(e.target.value)}
-      />
+    <div className="row">
+      
+      {/* 🟢 FORMULARIO */}
+      <div className="col-md-6">
 
-      <textarea
-        className="form-control mb-2"
-        placeholder="Descripción"
-        value={descripcion}
-        onChange={(e) => setDescripcion(e.target.value)}
-      />
+        <input
+          className="form-control mb-2"
+          placeholder="Nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
 
-      <input
-        className="form-control mb-2"
-        placeholder="Categoría"
-        value={categoria}
-        onChange={(e) => setCategoria(e.target.value)}
-      />
+        <input
+          className="form-control mb-2"
+          placeholder="Código"
+          value={codigo}
+          onChange={(e) => setCodigo(e.target.value)}
+        />
 
-      <input
-        className="form-control mb-2"
-        placeholder="Unidad de medida (ej: m, kg, unidad)"
-        value={unidadMedida}
-        onChange={(e) => setUnidadMedida(e.target.value)}
-      />
+        <textarea
+          className="form-control mb-2"
+          placeholder="Descripción"
+          value={descripcion}
+          onChange={(e) => setDescripcion(e.target.value)}
+        />
 
-<div className="mb-3 d-flex justify-content-left align-items-center gap-3">
-  {/* Grupo Stock Mínimo */}
-  <div className="d-flex align-items-center">
-    <label htmlFor="stockMinimo" className="form-label me-2 mb-0 text-nowrap">
-      Stock Mínimo
-    </label>
-    <input
-      id="stockMinimo"
-      type="number"
-      className="form-control"
-      style={{ width: '100px' }} // Aquí controlas el ancho del input
-      placeholder="0"
-      value={stockMinimo}
-      onChange={(e) => setStockMinimo(e.target.value)}
-    />
-  </div>
+        <input
+          className="form-control mb-2"
+          placeholder="Categoría"
+          value={categoria}
+          onChange={(e) => setCategoria(e.target.value)}
+        />
 
-  {/* Grupo Cantidad */}
-  <div className="d-flex align-items-center">
-    <label htmlFor="cantidad" className="form-label me-2 mb-0 text-nowrap">
-      Cantidad
-    </label>
-    <input
-      id="cantidad"
-      type="number"
-      className="form-control"
-      style={{ width: '100px' }} // Aquí controlas el ancho del input
-      placeholder="0"
-      value={cantidad}
-      onChange={(e) => setCantidad(e.target.value)}
-    />
-  </div>
-</div>
+        <input
+          className="form-control mb-2"
+          placeholder="Unidad de medida (ej: m, kg, unidad)"
+          value={unidadMedida}
+          onChange={(e) => setUnidadMedida(e.target.value)}
+        />
 
-      <input
-        className="form-control mb-2"
-        placeholder="Ubicación (ej: Estante A3)"
-        value={ubicacion}
-        onChange={(e) => setUbicacion(e.target.value)}
-      />
+        <div className="mb-3 d-flex gap-3">
 
-     
+          <div className="d-flex align-items-center">
+            <label className="form-label me-2 mb-0 text-nowrap">
+              Stock Mínimo
+            </label>
+            <input
+              type="number"
+              className="form-control"
+              style={{ width: "100px" }}
+              value={stockMinimo}
+              onChange={(e) => setStockMinimo(e.target.value)}
+            />
+          </div>
 
-      <input
-        type="file"
-        ref={fileRef}
-        className="form-control mb-3"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
+          <div className="d-flex align-items-center">
+            <label className="form-label me-2 mb-0 text-nowrap">
+              Cantidad
+            </label>
+            <input
+              type="number"
+              className="form-control"
+              style={{ width: "100px" }}
+              value={cantidad}
+              onChange={(e) => setCantidad(e.target.value)}
+            />
+          </div>
 
-      <button className="btn btn-success" onClick={handleSubmit}>
-        Crear Producto
-      </button>
+        </div>
+
+        <input
+          className="form-control mb-3"
+          placeholder="Ubicación (ej: Estante A3)"
+          value={ubicacion}
+          onChange={(e) => setUbicacion(e.target.value)}
+        />
+
+        <input
+          type="file"
+          ref={fileRef}
+          className="form-control mb-3"
+          onChange={(e) => {
+            const selectedFile = e.target.files[0];
+            setFile(selectedFile);
+
+            if (selectedFile) {
+              setPreview(URL.createObjectURL(selectedFile));
+            }
+          }}
+        />
+
+        <button className="btn btn-success w-100" onClick={handleSubmit}>
+          Crear Producto
+        </button>
+
+      </div>
+
+      {/* 🔵 PREVIEW */}
+      <div className="col-md-6 d-flex align-items-center justify-content-center">
+
+        {preview ? (
+          <img
+            src={preview}
+            alt="preview"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "400px",
+              borderRadius: "10px",
+              border: "1px solid #ddd"
+            }}
+          />
+        ) : (
+          <div className="text-muted text-center">
+            <p>Vista previa de imagen</p>
+          </div>
+        )}
+
+      </div>
+
     </div>
-  );
+  </div>
+);
 }

@@ -12,7 +12,5 @@ export const subirImagen = async (file) => {
 
   const data = await res.json();
 
-  console.log(data.secure_url);
-
-  return data.secure_url;
+  return data
 };
