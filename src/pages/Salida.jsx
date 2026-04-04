@@ -33,7 +33,8 @@ export default function Salida({ token }) {
 
       navigate("/productos");
 
-    } catch (error) {
+    // eslint-disable-next-line no-unused-vars
+    } catch (e) {
       alert("Error al registrar salida");
      
     }

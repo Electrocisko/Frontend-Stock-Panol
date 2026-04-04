@@ -4,7 +4,6 @@ import { getProductoById, registrarEntrada, registrarSalida } from "../api/api";
 
 export default function Movimiento({ token }) {
   const { id } = useParams();
-  const rol = localStorage.getItem("rol");
   const [producto, setProducto] = useState(null);
   const [tipo, setTipo] = useState("SALIDA");
   const [cantidad, setCantidad] = useState(0);
