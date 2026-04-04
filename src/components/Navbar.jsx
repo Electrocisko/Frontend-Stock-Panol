@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 
 export default function Navbar({ setToken }) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
+    navigate("/")
   };
 
   const rol = localStorage.getItem("rol");
