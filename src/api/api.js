@@ -51,3 +51,25 @@ export const getProductoById = async (id, token) => {
 
   return res.json();
 };
+
+export const registrarEntrada = async (data, token) => {
+  return fetch(`${API_URL}/movimientos/entrada`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  });
+};
+
+export const registrarSalida = async (data, token) => {
+  return fetch(`${API_URL}/movimientos/salida`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  });
+};
