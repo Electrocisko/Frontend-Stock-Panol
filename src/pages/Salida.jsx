@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProductoById, registrarSalida } from "../api/api";
+import { useToast } from "../context/useToast";
 
 export default function Salida({ token }) {
-
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const [producto, setProducto] = useState(null);
   const [cantidad, setCantidad] = useState(1);
@@ -16,27 +17,35 @@ export default function Salida({ token }) {
   }, []);
 
   const handleSubmit = async () => {
-
     if (cantidad <= 0) {
-      alert("Cantidad inválida");
+      showToast("Cantidad inválida", "error");
       return;
     }
 
     try {
-      await registrarSalida({
-        productoId: id,
-        cantidad,
-        motivo
-      }, token);
+      const res = await registrarSalida(
+        {
+          productoId: id,
+          cantidad,
+          motivo,
+        },
+        token,
+      );
 
-      alert("Salida registrada");
-
-      navigate("/productos");
-
-    // eslint-disable-next-line no-unused-vars
-    } catch (e) {
-      alert("Error al registrar salida");
-     
+      if (!res.ok) {
+        const error = await res.json();
+        showToast(error.detail || "Error", "error");
+        return;
+      } else {
+        showToast("Salida registrada", "success");
+        setTimeout(() => {
+          navigate("/productos");
+        }, 2000);
+      }
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      showToast(error.detail || "Error", "error");
+      return;
     }
   };
 
@@ -44,44 +53,46 @@ export default function Salida({ token }) {
 
   return (
     <div className="container mt-5">
-
-      <div className="p-4 shadow-sm bg-white"
+      <div
+        className="p-4 shadow-sm bg-white"
         style={{
           borderRadius: "12px",
-          border: "1px solid #e9ecef"
+          border: "1px solid #e9ecef",
         }}
       >
-
         {/* <h4 className="mb-2 text-center">Retirar Material</h4> */}
 
         {/* 🧱 INFO PRODUCTO */}
         <div className="text-center mb-4">
-            <div className="d-flex align-items-center justify-content-center gap-4">
-  <h4>{producto.nombre} - {producto.codigo}</h4>
-       {producto.urlImagen && (
-            <img
-              src={producto.urlImagen}
-              alt="producto"
-              style={{
-                maxHeight: "100px",
-                objectFit: "contain",
-                backgroundColor: "#f8f9fa",
-                borderRadius: "8px",
-                padding: "10px"
-              }}
-            />
-          )}
-            </div>
+          <div className="d-flex align-items-center justify-content-center gap-4">
+            <h4>
+              {producto.nombre} - {producto.codigo}
+            </h4>
+            {producto.urlImagen && (
+              <img
+                src={producto.urlImagen}
+                alt="producto"
+                style={{
+                  maxHeight: "100px",
+                  objectFit: "contain",
+                  backgroundColor: "#f8f9fa",
+                  borderRadius: "8px",
+                  padding: "10px",
+                }}
+              />
+            )}
+          </div>
 
-        
-          
           <p className="mt-3">
             Stock actual:{" "}
-            <strong className={producto.cantidad < producto.stockMinimo ? "text-danger" : ""}>
+            <strong
+              className={
+                producto.cantidad < producto.stockMinimo ? "text-danger" : ""
+              }
+            >
               {producto.cantidad}
             </strong>
           </p>
-
         </div>
 
         {/* 🔢 CANTIDAD */}
@@ -114,9 +125,7 @@ export default function Salida({ token }) {
         >
           RETIRAR MATERIAL
         </button>
-
       </div>
-
     </div>
   );
 }
