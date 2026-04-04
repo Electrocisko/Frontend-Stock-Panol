@@ -8,6 +8,7 @@ import Movimientos from "./pages/Movimientos";
 import Navbar from "./components/Navbar";
 import Admin from "./pages/Admin";
 import Movimiento from "./pages/Movimiento";
+import Salida from "./pages/Salida";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -28,6 +29,8 @@ function App() {
             <Route path="/productos" element={<Productos token={token} />} />
 
             <Route path="/movimientos" element={<Movimientos />} />
+
+            <Route path="/salida/:id" element={<Salida token={token} />} />
 
             <Route
               path="/movimiento/:id"

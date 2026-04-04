@@ -98,7 +98,7 @@ export default function Movimiento({ token }) {
       onChange={(e) => setTipo(e.target.value)}
     >
       <option value="SALIDA">Salida</option>
-     {rol == "ADMIN" && <option value="ENTRADA">Entrada</option>} 
+      <option value="ENTRADA">Entrada</option>
     </select>
   </div>
 

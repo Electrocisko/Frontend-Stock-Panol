@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function Productos({ token }) {
   const [productos, setProductos] = useState([]);
   const navigate = useNavigate();
+  const rol = localStorage.getItem("rol");
 
   useEffect(() => {
     getProductos(token).then(setProductos);
@@ -19,7 +20,13 @@ export default function Productos({ token }) {
           <div
             key={p.id}
             className="col-md-4 mb-4"
-            onClick={() => navigate(`/movimiento/${p.id}`)}
+            onClick={() => {
+              if (rol === "OPERARIO") {
+                navigate(`/salida/${p.id}`);
+              } else {
+                navigate(`/movimiento/${p.id}`);
+              }
+            }}
             style={{ cursor: "pointer" }}
           >
             <div className="card h-100 shadow-sm">
