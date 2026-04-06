@@ -4,7 +4,7 @@ import { useState } from "react";
 import Login from "./pages/Login";
 import Productos from "./pages/Productos";
 import CrearProducto from "./pages/CrearProducto";
-import Movimientos from "./pages/Movimientos";
+import MovimientosAdmin from "./pages/MovimientosAdmin";
 import Navbar from "./components/Navbar";
 import Admin from "./pages/Admin";
 import Movimiento from "./pages/Movimiento";
@@ -28,7 +28,14 @@ function App() {
 
             <Route path="/productos" element={<Productos token={token} />} />
 
-            <Route path="/movimientos" element={<Movimientos />} />
+           <Route
+  path="/movimientos"
+  element={
+    rol === "ADMIN"
+      ? <MovimientosAdmin />
+      : <Navigate to="/productos" />
+  }
+/>
 
             <Route path="/salida/:id" element={<Salida token={token} />} />
 

@@ -51,7 +51,7 @@ export default function Navbar({ setToken }) {
             Productos
           </NavLink>
 
-          <NavLink
+         { rol==="ADMIN"&&( <NavLink
             to="/movimientos"
             className={({ isActive }) =>
               isActive
@@ -60,7 +60,7 @@ export default function Navbar({ setToken }) {
             }
           >
             Movimientos
-          </NavLink>
+          </NavLink>)}
 
           <span
             onClick={logout}

@@ -25,51 +25,82 @@ export const crearProducto = async (data, token) => {
   return res.json();
 };
 
-export const getProductos = async (token) => {
-  const res = await fetch(`${API_URL}/productos`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getProductos = async () => {
+  const res = await fetchConAuth("/productos");
 
-  if (res.status === 401) {
-    localStorage.removeItem("token");
-    window.location.href = "/";
-  }
+  if (!res) return null;
 
-  return res.json();
+  return await res.json();
 };
 
-export const getProductoById = async (id, token) => {
-  const res = await fetch(`${API_URL}/productos/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
+export const getProductoById = async (id) => {
+  const res = await fetchConAuth(`/productos/${id}`);
+
+  if (!res) return null;
+
+  return await res.json();
+};
+
+export const registrarEntrada = async (data) => {
+  const res = await fetchConAuth("/movimientos/entrada", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  return res;
+};
+
+export const registrarSalida = async (data) => {
+  const res = await fetchConAuth("/movimientos/salida", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  return res; // 🔥 importante devolver res, no json
+};
+
+export const fetchConAuth = async (endpoint, options = {}) => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    });
+
+    // 🔥 TOKEN VENCIDO / NO AUTORIZADO
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("rol");
+
+      // redirigir al login
+      window.location.href = "/";
+
+      return null; // 🔥 cortar ejecución
     }
-  });
 
-  console.log(res.json);
+    return res;
+  } catch (error) {
+    console.error("Error de red:", error);
 
-  return res.json();
+    // opcional: podés también limpiar sesión
+    localStorage.removeItem("token");
+    localStorage.removeItem("rol");
+
+    window.location.href = "/";
+
+    return null;
+  }
 };
 
-export const registrarEntrada = async (data, token) => {
-  return fetch(`${API_URL}/movimientos/entrada`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(data)
-  });
-};
+export const getMovimientos = async () => {
+  const res = await fetchConAuth("/movimientos");
 
-export const registrarSalida = async (data, token) => {
-  return fetch(`${API_URL}/movimientos/salida`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(data)
-  });
+  if (!res) return null;
+
+  return await res.json();
 };

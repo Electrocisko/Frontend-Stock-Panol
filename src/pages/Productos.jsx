@@ -7,19 +7,21 @@ export default function Productos({ token }) {
   const navigate = useNavigate();
   const rol = localStorage.getItem("rol");
 
-  useEffect(() => {
-    getProductos(token).then(setProductos);
-  }, []);
+useEffect(() => {
+  getProductos(token).then((data) => {
+    if (data) setProductos(data);
+  });
+}, []);
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4">Productos</h2>
+      <h2 >Productos</h2>
 
-      <div className="row">
+      <div className="row g-3">
         {productos.map((p) => (
           <div
             key={p.id}
-            className="col-md-4 mb-4"
+            className="col-lg-3 col-md-4 col-sm-6"
             onClick={() => {
               if (rol === "OPERARIO") {
                 navigate(`/salida/${p.id}`);
@@ -35,12 +37,12 @@ export default function Productos({ token }) {
                 <img
                   src={p.urlImagen}
                   className="card-img-top"
-                  style={{ height: "200px", objectFit: "contain" }}
+                  style={{ height: "160px", objectFit: "contain" }}
                 />
               ) : (
                 <div
                   className="d-flex align-items-center justify-content-center bg-light"
-                  style={{ height: "200px" }}
+                  style={{ height: "160px" }}
                 >
                   <span className="text-muted">Sin imagen</span>
                 </div>

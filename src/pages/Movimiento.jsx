@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProductoById, registrarEntrada, registrarSalida } from "../api/api";
+import { useToast } from "../context/useToast";
 
 export default function Movimiento({ token }) {
   const { id } = useParams();
@@ -8,6 +9,7 @@ export default function Movimiento({ token }) {
   const [tipo, setTipo] = useState("SALIDA");
   const [cantidad, setCantidad] = useState(0);
   const [motivo, setMotivo] = useState("");
+  const { showToast } = useToast();
 
   useEffect(() => {
     getProductoById(id, token).then(setProducto);
@@ -25,7 +27,14 @@ export default function Movimiento({ token }) {
     };
 
     if (tipo === "ENTRADA") {
-      await registrarEntrada(data, token);
+
+      const res = await registrarEntrada(data, token);
+
+// SEGUIR ACA
+
+
+
+      
     } else {
       await registrarSalida(data, token);
     }
@@ -87,50 +96,45 @@ export default function Movimiento({ token }) {
         </div>
       </div>
       <div className="mt-4">
+        {/* 🔹 Tipo */}
+        <div className="mb-3">
+          <label className="form-label">Tipo</label>
+          <select
+            className="form-control"
+            value={tipo}
+            onChange={(e) => setTipo(e.target.value)}
+          >
+            <option value="SALIDA">Salida</option>
+            <option value="ENTRADA">Entrada</option>
+          </select>
+        </div>
 
-  {/* 🔹 Tipo */}
-  <div className="mb-3">
-    <label className="form-label">Tipo</label>
-    <select
-      className="form-control"
-      value={tipo}
-      onChange={(e) => setTipo(e.target.value)}
-    >
-      <option value="SALIDA">Salida</option>
-      <option value="ENTRADA">Entrada</option>
-    </select>
-  </div>
+        {/* 🔹 Cantidad */}
+        <div className="mb-3">
+          <label className="form-label">Cantidad</label>
+          <input
+            type="number"
+            className="form-control"
+            value={cantidad}
+            onChange={(e) => setCantidad(e.target.value)}
+          />
+        </div>
 
-  {/* 🔹 Cantidad */}
-  <div className="mb-3">
-    <label className="form-label">Cantidad</label>
-    <input
-      type="number"
-      className="form-control"
-      value={cantidad}
-      onChange={(e) => setCantidad(e.target.value)}
-    />
-  </div>
+        {/* 🔹 Motivo */}
+        <div className="mb-3">
+          <label className="form-label">Motivo</label>
+          <input
+            className="form-control"
+            value={motivo}
+            onChange={(e) => setMotivo(e.target.value)}
+          />
+        </div>
 
-  {/* 🔹 Motivo */}
-  <div className="mb-3">
-    <label className="form-label">Motivo</label>
-    <input
-      className="form-control"
-      value={motivo}
-      onChange={(e) => setMotivo(e.target.value)}
-    />
-  </div>
-
-  {/* 🔥 Botón */}
-  <button className="btn btn-dark w-100" onClick={handleSubmit}>
-    Confirmar Movimiento
-  </button>
-
-</div>
+        {/* 🔥 Botón */}
+        <button className="btn btn-dark w-100" onClick={handleSubmit}>
+          Confirmar Movimiento
+        </button>
+      </div>
     </div>
-
-
-    
   );
 }
