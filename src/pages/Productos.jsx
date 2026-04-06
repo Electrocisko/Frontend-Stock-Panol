@@ -13,7 +13,6 @@ export default function Productos({ token }) {
   useEffect(() => {
     getProductos(token).then((data) => {
       if (data) setProductos(data);
-        console.log(data)
     });
   }, []);
 

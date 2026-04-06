@@ -9,7 +9,21 @@ export const login = async (data) => {
     body: JSON.stringify(data),
   });
 
-  return res.json();
+  const body = await res.json();
+
+  // 🔥 ERROR (ej: 401)
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: body.detail || "Error",
+    };
+  }
+
+  // 🔥 OK
+  return {
+    ok: true,
+    data: body,
+  };
 };
 
 export const crearProducto = async (data, token) => {
