@@ -100,7 +100,7 @@ export default function CrearProducto({ token }) {
           </select>
 
           <input
-            className="form-control mb-2"
+            className="form-control mb-2 mt-2"
             placeholder="Unidad de medida (ej: m, kg, unidad)"
             value={unidadMedida}
             onChange={(e) => setUnidadMedida(e.target.value)}
@@ -117,6 +117,7 @@ export default function CrearProducto({ token }) {
                 style={{ width: "100px" }}
                 value={stockMinimo}
                 onChange={(e) => setStockMinimo(e.target.value)}
+                 onFocus={(e) => e.target.select()}
               />
             </div>
 
@@ -130,6 +131,7 @@ export default function CrearProducto({ token }) {
                 style={{ width: "100px" }}
                 value={cantidad}
                 onChange={(e) => setCantidad(e.target.value)}
+                 onFocus={(e) => e.target.select()}
               />
             </div>
           </div>

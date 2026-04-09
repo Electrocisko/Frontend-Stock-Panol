@@ -20,7 +20,7 @@ export default function Navbar({ setToken }) {
         <Link to="/productos" className="fw-bold">
           {" "}
           <img
-            src="\public\Logo Vier.webp"
+            src="Logo Vier.webp"
             alt="Logo"
             width="auto"
             height="30"
