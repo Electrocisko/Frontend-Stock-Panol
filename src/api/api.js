@@ -118,3 +118,27 @@ export const getMovimientos = async () => {
 
   return await res.json();
 };
+
+export const registrarUsuario = async (data) => {
+  const res = await fetch(`${API_URL}/usuarios/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const body = await res.json();
+
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: body.detail || "Error al registrar",
+    };
+  }
+
+  return {
+    ok: true,
+    data: body,
+  };
+};
