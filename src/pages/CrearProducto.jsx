@@ -106,7 +106,7 @@ export default function CrearProducto({ token }) {
             onChange={(e) => setUnidadMedida(e.target.value)}
           />
 
-          <div className="mb-3 d-flex gap-3">
+          <div className="mb-3 d-flex flex-column flex-md-row gap-3">
             <div className="d-flex align-items-center">
               <label className="form-label me-2 mb-0 text-nowrap">
                 Stock Mínimo
