@@ -18,7 +18,8 @@ export default function Productos({ token }) {
 
 
 
-  const productosFiltrados = productos.filter((p) => {
+ const productosFiltrados = productos
+  .filter((p) => {
     const texto = busqueda.toLowerCase();
 
     const coincideBusqueda =
@@ -28,6 +29,17 @@ export default function Productos({ token }) {
     const coincideCategoria = categoria ? p.categoria === categoria : true;
 
     return coincideBusqueda && coincideCategoria;
+  })
+  .sort((a, b) => {
+    // 🔴 Sin stock primero
+    if (a.sinStock && !b.sinStock) return -1;
+    if (!a.sinStock && b.sinStock) return 1;
+
+    // 🟡 Stock bajo después
+    if (a.stockBajo && !b.stockBajo) return -1;
+    if (!a.stockBajo && b.stockBajo) return 1;
+
+    return 0;
   });
 
   return (
@@ -78,37 +90,79 @@ export default function Productos({ token }) {
               }}
               style={{ cursor: "pointer" }}
             >
-              <div className="card h-100 shadow-sm">
-                {/* 🖼️ Imagen */}
-                {p.urlImagen ? (
-                  <img
-                    src={p.urlImagen}
-                    className="card-img-top"
-                    style={{ height: "160px", objectFit: "contain" }}
-                  />
-                ) : (
-                  <div
-                    className="d-flex align-items-center justify-content-center bg-light"
-                    style={{ height: "160px" }}
-                  >
-                    <span className="text-muted">Sin imagen</span>
-                  </div>
-                )}
+<div className="card h-100 shadow-sm">
+  {/* 🖼️ Imagen + overlay */}
+  <div style={{ position: "relative" }}>
 
-                {/* 📦 Info */}
-                <div className="card-body">
-                  <h5 className="card-title">{p.nombre}</h5>
-                  <p className="card-text mb-1">
-                    <strong>Código:</strong> {p.codigo}
-                  </p>
-                  <p className="card-text mb-1">
-                    <strong>Categoría:</strong> {p.categoria}
-                  </p>
-                  <p className="card-text mb-1">
-                    <strong>Stock:</strong> {p.cantidad}
-                  </p>
-                </div>
-              </div>
+    {/* 🔴 SIN STOCK */}
+    {p.sinStock && (
+      <span
+        style={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          backgroundColor: "red",
+          color: "white",
+          padding: "5px 10px",
+          borderRadius: "5px",
+          fontWeight: "bold",
+          zIndex: 2,
+        }}
+      >
+        Sin stock
+      </span>
+    )}
+
+    {/* 🟡 STOCK BAJO */}
+    {!p.sinStock && p.stockBajo && (
+      <span
+        style={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          backgroundColor: "orange",
+          color: "white",
+          padding: "5px 10px",
+          borderRadius: "5px",
+          fontWeight: "bold",
+          zIndex: 2,
+        }}
+      >
+        Stock bajo
+      </span>
+    )}
+
+    {/* 🖼️ Imagen */}
+    {p.urlImagen ? (
+      <img
+        src={p.urlImagen}
+        className="card-img-top"
+        style={{ height: "160px", objectFit: "contain" }}
+      />
+    ) : (
+      <div
+        className="d-flex align-items-center justify-content-center bg-light"
+        style={{ height: "160px" }}
+      >
+        <span className="text-muted">Sin imagen</span>
+      </div>
+    )}
+  </div>
+
+  {/* 📦 Info */}
+  <div className="card-body">
+    <h5 className="card-title">{p.nombre}</h5>
+    <p className="card-text mb-1">
+      <strong>Código:</strong> {p.codigo}
+    </p>
+    <p className="card-text mb-1">
+      <strong>Categoría:</strong> {p.categoria}
+    </p>
+    <p className="card-text mb-1">
+      <strong>Stock:</strong> {p.cantidad}
+    </p>
+  </div>
+</div>
             </div>
           ))}
           {productosFiltrados.length === 0 && (
