@@ -1,8 +1,14 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { useState } from "react";
 
 import Login from "./pages/Login";
-import Register from "./components/Register"; // 🔥 IMPORTANTE
+import Register from "./components/Register";
 import Productos from "./pages/Productos";
 import CrearProducto from "./pages/CrearProducto";
 import MovimientosAdmin from "./pages/MovimientosAdmin";
@@ -11,20 +17,37 @@ import Admin from "./pages/Admin";
 import Movimiento from "./pages/Movimiento";
 import Salida from "./pages/Salida";
 
-function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+// 🔥 Wrapper para usar location
+function AppContent({ token, setToken }) {
+  const location = useLocation();
   const rol = localStorage.getItem("rol");
 
-  return (
-    <BrowserRouter>
+  // 🔥 Ocultar navbar en login/register
+  const hideNavbar =
+    location.pathname === "/" || location.pathname === "/register";
 
-      {/* 🔥 Navbar solo si hay login */}
-      {token && <Navbar setToken={setToken} />}
+  return (
+    <>
+      {/* 🔥 Navbar solo si corresponde */}
+      {token && !hideNavbar && <Navbar setToken={setToken} />}
 
       <Routes>
         {/* 🔐 públicas */}
-        <Route path="/" element={<Login setToken={setToken} />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/"
+          element={
+            token ? (
+              <Navigate to="/productos" />
+            ) : (
+              <Login setToken={setToken} />
+            )
+          }
+        />
+
+        <Route
+          path="/register"
+          element={token ? <Navigate to="/productos" /> : <Register />}
+        />
 
         {/* 🔒 privadas */}
         <Route
@@ -67,6 +90,16 @@ function App() {
           }
         />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
+  return (
+    <BrowserRouter>
+      <AppContent token={token} setToken={setToken} />
     </BrowserRouter>
   );
 }
