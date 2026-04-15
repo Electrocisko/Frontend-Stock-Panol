@@ -68,14 +68,7 @@ export default function Navbar({ setToken }) {
             </NavLink>
           )}
 
-          {isAdmin && (
-            <NavLink
-              to="/admin/crear"
-              className="text-dark text-decoration-none"
-            >
-              Nuevo
-            </NavLink>
-          )}
+
 
           <span
             onClick={logout}
@@ -119,15 +112,6 @@ export default function Navbar({ setToken }) {
             </NavLink>
           )}
 
-          {isAdmin && (
-            <NavLink
-              to="/admin/crear"
-              onClick={() => setOpen(false)}
-              className="text-dark text-decoration-none"
-            >
-              Nuevo
-            </NavLink>
-          )}
 
           <span
             onClick={logout}

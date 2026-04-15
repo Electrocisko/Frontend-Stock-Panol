@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')).render(
   <ToastProvider>
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
   </ToastProvider>
 
 )
