@@ -16,7 +16,8 @@ import Navbar from "./components/Navbar";
 import Admin from "./pages/Admin";
 import Movimiento from "./pages/Movimiento";
 import Salida from "./pages/Salida";
-import AdminProveedores from "./components/AdminProveedores"; // ✅ NUEVO
+import AdminProveedores from "./components/AdminProveedores";
+import StockBajoPorProveedor from "./pages/StockBajoPorProveedor";
 
 // 🔥 Wrapper para usar location
 function AppContent({ token, setToken }) {
@@ -98,6 +99,15 @@ function AppContent({ token, setToken }) {
           element={
             token && rol === "ADMIN"
               ? <AdminProveedores />
+              : <Navigate to="/" />
+          }
+        />
+
+        <Route
+          path="/admin/stock-bajo"
+          element={
+            token && rol === "ADMIN"
+              ? <StockBajoPorProveedor />
               : <Navigate to="/" />
           }
         />

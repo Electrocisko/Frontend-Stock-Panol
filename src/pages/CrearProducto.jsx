@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { crearProducto } from "../api/api";
 import { subirImagen } from "../api/cloudinary";
 import { CATEGORIAS } from "../api/categorias.js";
+import { useEffect } from "react";
+import { getProveedores } from "../api/api";
 
 export default function CrearProducto({ token }) {
   const [nombre, setNombre] = useState("");
@@ -14,6 +16,8 @@ export default function CrearProducto({ token }) {
   const [cantidad, setCantidad] = useState(0);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [proveedores, setProveedores] = useState([]);
+  const [proveedorId, setProveedorId] = useState("");
 
   const fileRef = useRef();
 
@@ -25,20 +29,21 @@ export default function CrearProducto({ token }) {
       imageUrl = img.secure_url;
     }
 
-    await crearProducto(
-      {
-        nombre,
-        codigo,
-        descripcion,
-        categoria,
-        unidadMedida,
-        stockMinimo,
-        ubicacion,
-        cantidad,
-        urlImagen: imageUrl,
-      },
-      token,
-    );
+await crearProducto(
+  {
+    nombre,
+    codigo,
+    descripcion,
+    categoria,
+    unidadMedida,
+    stockMinimo,
+    ubicacion,
+    cantidad,
+    urlImagen: imageUrl,
+    proveedorId: proveedorId ? Number(proveedorId) : null, // 🔥 CLAVE
+  },
+  token
+);
 
     alert("Producto creado");
 
@@ -54,7 +59,18 @@ export default function CrearProducto({ token }) {
     setFile(null);
     fileRef.current.value = "";
     setPreview(null);
+    setProveedorId("");
   };
+
+  useEffect(() => {
+    const cargarProveedores = async () => {
+      const data = await getProveedores();
+      if (data) setProveedores(data);
+    };
+
+    cargarProveedores();
+  }, []);
+
 
   return (
     <div className="container mt-5">
@@ -99,7 +115,21 @@ export default function CrearProducto({ token }) {
             ))}
           </select>
 
-          <input
+          <select
+            className="form-control mt-2"
+            value={proveedorId}
+            onChange={(e) => setProveedorId(e.target.value)}
+          >
+            <option value="">Seleccionar proveedor</option>
+
+            {proveedores.map((prov) => (
+              <option key={prov.id} value={prov.id}>
+                {prov.nombre}
+              </option>
+            ))}
+          </select>
+
+          <input  
             className="form-control mb-2 mt-2"
             placeholder="Unidad de medida (ej: m, kg, unidad)"
             value={unidadMedida}
@@ -117,7 +147,7 @@ export default function CrearProducto({ token }) {
                 style={{ width: "100px" }}
                 value={stockMinimo}
                 onChange={(e) => setStockMinimo(e.target.value)}
-                 onFocus={(e) => e.target.select()}
+                onFocus={(e) => e.target.select()}
               />
             </div>
 
@@ -131,7 +161,7 @@ export default function CrearProducto({ token }) {
                 style={{ width: "100px" }}
                 value={cantidad}
                 onChange={(e) => setCantidad(e.target.value)}
-                 onFocus={(e) => e.target.select()}
+                onFocus={(e) => e.target.select()}
               />
             </div>
           </div>

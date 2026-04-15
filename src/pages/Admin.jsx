@@ -31,6 +31,13 @@ export default function Admin() {
         </Link>
 
         <Link
+  to="/admin/stock-bajo"
+  className="btn btn-outline-dark w-100"
+>
+  Stock Bajo por Proveedor
+</Link>
+
+        <Link
           to="/admin/proveedores"
           className="btn btn-outline-dark w-100"
         >
