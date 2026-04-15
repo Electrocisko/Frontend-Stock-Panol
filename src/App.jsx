@@ -16,6 +16,7 @@ import Navbar from "./components/Navbar";
 import Admin from "./pages/Admin";
 import Movimiento from "./pages/Movimiento";
 import Salida from "./pages/Salida";
+import AdminProveedores from "./components/AdminProveedores"; // ✅ NUEVO
 
 // 🔥 Wrapper para usar location
 function AppContent({ token, setToken }) {
@@ -74,6 +75,7 @@ function AppContent({ token, setToken }) {
           element={token ? <Movimiento token={token} /> : <Navigate to="/" />}
         />
 
+        {/* 🔧 ADMIN */}
         <Route
           path="/admin"
           element={
@@ -89,6 +91,19 @@ function AppContent({ token, setToken }) {
               : <Navigate to="/" />
           }
         />
+
+        {/* ✅ NUEVO: proveedores */}
+        <Route
+          path="/admin/proveedores"
+          element={
+            token && rol === "ADMIN"
+              ? <AdminProveedores />
+              : <Navigate to="/" />
+          }
+        />
+
+        {/* 🔥 fallback */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>
   );

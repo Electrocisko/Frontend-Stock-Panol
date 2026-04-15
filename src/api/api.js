@@ -142,3 +142,22 @@ export const registrarUsuario = async (data) => {
     data: body,
   };
 };
+
+export const crearProveedor = async (data) => {
+  const res = await fetchConAuth("/proveedores", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  if (!res) return null;
+
+  return await res.json();
+};
+
+export const getProveedores = async () => {
+  const res = await fetchConAuth("/proveedores");
+
+  if (!res) return null;
+
+  return await res.json();
+};

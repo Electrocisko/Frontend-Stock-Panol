@@ -30,6 +30,13 @@ export default function Admin() {
           Ver Movimientos
         </Link>
 
+        <Link
+          to="/admin/proveedores"
+          className="btn btn-outline-dark w-100"
+        >
+          Registrar Proveedor
+        </Link>
+
       </div>
     </div>
   );
