@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getProductos } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { CATEGORIAS } from "../api/categorias.js";
+import ProductCard from "../components/ProductCard.jsx";
 
 export default function Productos({ token }) {
   const [productos, setProductos] = useState([]);
@@ -16,31 +17,29 @@ export default function Productos({ token }) {
     });
   }, []);
 
+  const productosFiltrados = productos
+    .filter((p) => {
+      const texto = busqueda.toLowerCase();
 
+      const coincideBusqueda =
+        p.codigo.toLowerCase().includes(texto) ||
+        p.nombre.toLowerCase().includes(texto);
 
- const productosFiltrados = productos
-  .filter((p) => {
-    const texto = busqueda.toLowerCase();
+      const coincideCategoria = categoria ? p.categoria === categoria : true;
 
-    const coincideBusqueda =
-      p.codigo.toLowerCase().includes(texto) ||
-      p.nombre.toLowerCase().includes(texto);
+      return coincideBusqueda && coincideCategoria;
+    })
+    .sort((a, b) => {
+      // 🔴 Sin stock primero
+      if (a.sinStock && !b.sinStock) return -1;
+      if (!a.sinStock && b.sinStock) return 1;
 
-    const coincideCategoria = categoria ? p.categoria === categoria : true;
+      // 🟡 Stock bajo después
+      if (a.stockBajo && !b.stockBajo) return -1;
+      if (!a.stockBajo && b.stockBajo) return 1;
 
-    return coincideBusqueda && coincideCategoria;
-  })
-  .sort((a, b) => {
-    // 🔴 Sin stock primero
-    if (a.sinStock && !b.sinStock) return -1;
-    if (!a.sinStock && b.sinStock) return 1;
-
-    // 🟡 Stock bajo después
-    if (a.stockBajo && !b.stockBajo) return -1;
-    if (!a.stockBajo && b.stockBajo) return 1;
-
-    return 0;
-  });
+      return 0;
+    });
 
   return (
     <>
@@ -90,79 +89,7 @@ export default function Productos({ token }) {
               }}
               style={{ cursor: "pointer" }}
             >
-<div className="card h-100 shadow-sm">
-  {/* 🖼️ Imagen + overlay */}
-  <div style={{ position: "relative" }}>
-
-    {/* 🔴 SIN STOCK */}
-    {p.sinStock && (
-      <span
-        style={{
-          position: "absolute",
-          top: "10px",
-          left: "10px",
-          backgroundColor: "red",
-          color: "white",
-          padding: "5px 10px",
-          borderRadius: "5px",
-          fontWeight: "bold",
-          zIndex: 2,
-        }}
-      >
-        Sin stock
-      </span>
-    )}
-
-    {/* 🟡 STOCK BAJO */}
-    {!p.sinStock && p.stockBajo && (
-      <span
-        style={{
-          position: "absolute",
-          top: "10px",
-          left: "10px",
-          backgroundColor: "orange",
-          color: "white",
-          padding: "5px 10px",
-          borderRadius: "5px",
-          fontWeight: "bold",
-          zIndex: 2,
-        }}
-      >
-        Stock bajo
-      </span>
-    )}
-
-    {/* 🖼️ Imagen */}
-    {p.urlImagen ? (
-      <img
-        src={p.urlImagen}
-        className="card-img-top"
-        style={{ height: "160px", objectFit: "contain" }}
-      />
-    ) : (
-      <div
-        className="d-flex align-items-center justify-content-center bg-light"
-        style={{ height: "160px" }}
-      >
-        <span className="text-muted">Sin imagen</span>
-      </div>
-    )}
-  </div>
-
-  {/* 📦 Info */}
-  <div className="card-body">
-    <h5 className="card-title">{p.nombre}</h5>
-    <p className="card-text mb-1">
-      <strong>Código:</strong> {p.codigo}
-    </p>
-    <p className="card-text mb-1">
-      <strong>Categoría:</strong> {p.categoria}
-    </p>
-    <p className="card-text mb-1">
-      <strong>Stock:</strong> {p.cantidad}
-    </p>
-  </div>
-</div>
+             <ProductCard p={p} />
             </div>
           ))}
           {productosFiltrados.length === 0 && (

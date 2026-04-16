@@ -18,6 +18,8 @@ import Movimiento from "./pages/Movimiento";
 import Salida from "./pages/Salida";
 import AdminProveedores from "./components/AdminProveedores";
 import StockBajoPorProveedor from "./pages/StockBajoPorProveedor";
+import ProductosAdmin from "./pages/ProductosAdmin";
+import EditarProducto from "./pages/EditarProducto";
 
 // 🔥 Wrapper para usar location
 function AppContent({ token, setToken }) {
@@ -38,11 +40,7 @@ function AppContent({ token, setToken }) {
         <Route
           path="/"
           element={
-            token ? (
-              <Navigate to="/productos" />
-            ) : (
-              <Login setToken={setToken} />
-            )
+            token ? <Navigate to="/productos" /> : <Login setToken={setToken} />
           }
         />
 
@@ -60,9 +58,11 @@ function AppContent({ token, setToken }) {
         <Route
           path="/movimientos"
           element={
-            token && rol === "ADMIN"
-              ? <MovimientosAdmin />
-              : <Navigate to="/" />
+            token && rol === "ADMIN" ? (
+              <MovimientosAdmin />
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
 
@@ -79,17 +79,17 @@ function AppContent({ token, setToken }) {
         {/* 🔧 ADMIN */}
         <Route
           path="/admin"
-          element={
-            token && rol === "ADMIN" ? <Admin /> : <Navigate to="/" />
-          }
+          element={token && rol === "ADMIN" ? <Admin /> : <Navigate to="/" />}
         />
 
         <Route
           path="/admin/crear"
           element={
-            token && rol === "ADMIN"
-              ? <CrearProducto token={token} />
-              : <Navigate to="/" />
+            token && rol === "ADMIN" ? (
+              <CrearProducto token={token} />
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
 
@@ -97,18 +97,36 @@ function AppContent({ token, setToken }) {
         <Route
           path="/admin/proveedores"
           element={
-            token && rol === "ADMIN"
-              ? <AdminProveedores />
-              : <Navigate to="/" />
+            token && rol === "ADMIN" ? (
+              <AdminProveedores />
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
 
         <Route
           path="/admin/stock-bajo"
           element={
-            token && rol === "ADMIN"
-              ? <StockBajoPorProveedor />
-              : <Navigate to="/" />
+            token && rol === "ADMIN" ? (
+              <StockBajoPorProveedor />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+
+        <Route
+          path="/admin/productos"
+          element={
+            token && rol === "ADMIN" ? <ProductosAdmin /> : <Navigate to="/" />
+          }
+        />
+
+        <Route
+          path="/admin/editar/:id"
+          element={
+            token && rol === "ADMIN" ? <EditarProducto /> : <Navigate to="/" />
           }
         />
 
