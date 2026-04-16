@@ -83,23 +83,39 @@ const ProductoForm = ({
           onChange={handleChange}
         />
 
-        <div className="mb-3 d-flex gap-3">
-          <input
-            type="number"
-            name="stockMinimo"
-            className="form-control"
-            value={form.stockMinimo}
-            onChange={handleChange}
-          />
+<div className="mb-3">
+  <div className="d-flex gap-3">
+    
+    {/* Stock mínimo */}
+    <div className="w-100">
+      <label className="form-label small text-muted">
+        Stock mínimo
+      </label>
+      <input
+        type="number"
+        name="stockMinimo"
+        className="form-control"
+        value={form.stockMinimo}
+        onChange={handleChange}
+      />
+    </div>
 
-          <input
-            type="number"
-            name="cantidad"
-            className="form-control"
-            value={form.cantidad}
-            onChange={handleChange}
-          />
-        </div>
+    {/* Stock actual */}
+    <div className="w-100">
+      <label className="form-label small text-muted">
+        Cantidad Inicial
+      </label>
+      <input
+        type="number"
+        name="cantidad"
+        className="form-control"
+        value={form.cantidad}
+        onChange={handleChange}
+      />
+    </div>
+
+  </div>
+</div>
 
         <input
           name="ubicacion"

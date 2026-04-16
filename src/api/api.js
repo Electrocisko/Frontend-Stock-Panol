@@ -161,3 +161,14 @@ export const getProveedores = async () => {
 
   return await res.json();
 };
+
+export const actualizarProducto = async (id, data) => {
+  const res = await fetchConAuth(`/productos/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+
+  if (!res) return null;
+
+  return await res.json();
+};
