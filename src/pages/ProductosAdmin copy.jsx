@@ -79,62 +79,18 @@ useEffect(() => {
         </p>
       )}
 
- <div className="table-responsive mt-3">
-  <table className="table table-hover align-middle">
-    <thead className="table-light">
-      <tr>
-        <th>Nombre</th>
-        <th>Código</th>
-        <th>Categoría</th>
-        <th>Stock</th>
-        <th>Ubicación</th>
-      </tr>
-    </thead>
-
-<tbody>
-  {productosFiltrados.map((p) => (
-    <tr key={p.id}>
-      <td className="text-start">{p.nombre}</td>
-      <td>{p.codigo}</td>
-      <td>{p.categoria}</td>
-
-      <td>
-        <span
-          className={
-            p.sinStock
-              ? "text-danger fw-bold"
-              : p.stockBajo
-              ? "text-warning fw-bold"
-              : "text-success"
-          }
-        >
-          {p.cantidad}
-        </span>
-      </td>
-
-      <td>{p.ubicacion}</td>
-
-      {/* 🔥 ACCIONES */}
-      <td className="d-flex gap-2">
-        <button
-          className="btn btn-sm btn-outline-primary"
-          onClick={() => navigate(`/admin/editar/${p.id}`)}
-        >
-          Editar
-        </button>
-
-        <button
-          className="btn btn-sm btn-outline-success"
-          onClick={() => navigate(`/movimiento/${p.id}`)}
-        >
-          Mov
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-  </table>
-</div>
+      <div className="row g-3">
+        {productosFiltrados.map((p) => (
+          <div
+            key={p.id}
+            className="col-lg-3 col-md-4 col-sm-6"
+            onClick={() => navigate(`/admin/editar/${p.id}`)}
+            style={{ cursor: "pointer" }}
+          >
+            <ProductCard p={p} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

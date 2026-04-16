@@ -9,11 +9,11 @@ export default function Admin() {
 
       <div className="d-flex flex-column flex-md-row gap-3">
         <Link to="/admin/crear" className="btn btn-outline-dark w-100">
-          Crear Producto
+          Ingresar Producto Nuevo
         </Link>
 
         <Link to="/productos" className="btn btn-outline-dark w-100">
-          Ver Productos
+          Ingreso / Salida de Productos
         </Link>
 
         <Link to="/movimientos" className="btn btn-outline-dark w-100">
