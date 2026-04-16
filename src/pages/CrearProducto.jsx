@@ -1,25 +1,32 @@
-import { useState, useRef } from "react";
-import { crearProducto } from "../api/api";
+import { useState, useEffect, useRef } from "react";
+import { crearProducto, getProveedores } from "../api/api";
 import { subirImagen } from "../api/cloudinary";
-import { CATEGORIAS } from "../api/categorias.js";
-import { useEffect } from "react";
-import { getProveedores } from "../api/api";
+import ProductoForm from "../components/ProductoForm";
 
 export default function CrearProducto({ token }) {
-  const [nombre, setNombre] = useState("");
-  const [codigo, setCodigo] = useState("");
-  const [descripcion, setDescripcion] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [unidadMedida, setUnidadMedida] = useState("");
-  const [stockMinimo, setStockMinimo] = useState(0);
-  const [ubicacion, setUbicacion] = useState("");
-  const [cantidad, setCantidad] = useState(0);
+  const [form, setForm] = useState({
+    nombre: "",
+    codigo: "",
+    descripcion: "",
+    categoria: "",
+    unidadMedida: "",
+    stockMinimo: 0,
+    ubicacion: "",
+    cantidad: 0,
+    proveedorId: "",
+  });
+
+  const [proveedores, setProveedores] = useState([]);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const [proveedores, setProveedores] = useState([]);
-  const [proveedorId, setProveedorId] = useState("");
 
   const fileRef = useRef();
+
+  useEffect(() => {
+    getProveedores().then((data) => {
+      if (data) setProveedores(data);
+    });
+  }, []);
 
   const handleSubmit = async () => {
     let imageUrl = "";
@@ -29,189 +36,52 @@ export default function CrearProducto({ token }) {
       imageUrl = img.secure_url;
     }
 
-await crearProducto(
-  {
-    nombre,
-    codigo,
-    descripcion,
-    categoria,
-    unidadMedida,
-    stockMinimo,
-    ubicacion,
-    cantidad,
-    urlImagen: imageUrl,
-    proveedorId: proveedorId ? Number(proveedorId) : null, // 🔥 CLAVE
-  },
-  token
-);
+    await crearProducto(
+      {
+        ...form,
+        proveedorId: form.proveedorId
+          ? Number(form.proveedorId)
+          : null,
+        urlImagen: imageUrl,
+      },
+      token
+    );
 
     alert("Producto creado");
 
-    // 🔥 limpiar formulario
-    setNombre("");
-    setCodigo("");
-    setDescripcion("");
-    setCategoria("");
-    setUnidadMedida("");
-    setStockMinimo(0);
-    setUbicacion("");
-    setCantidad(0);
+    // reset
+    setForm({
+      nombre: "",
+      codigo: "",
+      descripcion: "",
+      categoria: "",
+      unidadMedida: "",
+      stockMinimo: 0,
+      ubicacion: "",
+      cantidad: 0,
+      proveedorId: "",
+    });
+
     setFile(null);
-    fileRef.current.value = "";
     setPreview(null);
-    setProveedorId("");
+    fileRef.current.value = "";
   };
-
-  useEffect(() => {
-    const cargarProveedores = async () => {
-      const data = await getProveedores();
-      if (data) setProveedores(data);
-    };
-
-    cargarProveedores();
-  }, []);
-
 
   return (
     <div className="container mt-5">
       <h2>Nuevo Producto</h2>
 
-      <div className="row">
-        {/* 🟢 FORMULARIO */}
-        <div className="col-md-6">
-          <input
-            className="form-control mb-2"
-            placeholder="Nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
-
-          <input
-            className="form-control mb-2"
-            placeholder="Código"
-            value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
-          />
-
-          <textarea
-            className="form-control mb-2"
-            placeholder="Descripción"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-          />
-
-          <select
-            className="form-control"
-            required={true}
-            value={categoria}
-            onChange={(e) => setCategoria(e.target.value)}
-          >
-            <option value="">Seleccionar categoría</option>
-
-            {CATEGORIAS.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-
-          <select
-            className="form-control mt-2"
-            value={proveedorId}
-            onChange={(e) => setProveedorId(e.target.value)}
-          >
-            <option value="">Seleccionar proveedor</option>
-
-            {proveedores.map((prov) => (
-              <option key={prov.id} value={prov.id}>
-                {prov.nombre}
-              </option>
-            ))}
-          </select>
-
-          <input  
-            className="form-control mb-2 mt-2"
-            placeholder="Unidad de medida (ej: m, kg, unidad)"
-            value={unidadMedida}
-            onChange={(e) => setUnidadMedida(e.target.value)}
-          />
-
-          <div className="mb-3 d-flex flex-column flex-md-row gap-3">
-            <div className="d-flex align-items-center">
-              <label className="form-label me-2 mb-0 text-nowrap">
-                Stock Mínimo
-              </label>
-              <input
-                type="number"
-                className="form-control"
-                style={{ width: "100px" }}
-                value={stockMinimo}
-                onChange={(e) => setStockMinimo(e.target.value)}
-                onFocus={(e) => e.target.select()}
-              />
-            </div>
-
-            <div className="d-flex align-items-center">
-              <label className="form-label me-2 mb-0 text-nowrap">
-                Cantidad
-              </label>
-              <input
-                type="number"
-                className="form-control"
-                style={{ width: "100px" }}
-                value={cantidad}
-                onChange={(e) => setCantidad(e.target.value)}
-                onFocus={(e) => e.target.select()}
-              />
-            </div>
-          </div>
-
-          <input
-            className="form-control mb-3"
-            placeholder="Ubicación (ej: Estante A3)"
-            value={ubicacion}
-            onChange={(e) => setUbicacion(e.target.value)}
-          />
-
-          <input
-            type="file"
-            ref={fileRef}
-            className="form-control mb-3"
-            onChange={(e) => {
-              const selectedFile = e.target.files[0];
-              setFile(selectedFile);
-
-              if (selectedFile) {
-                setPreview(URL.createObjectURL(selectedFile));
-              }
-            }}
-          />
-
-          <button className="btn btn btn-dark w-100" onClick={handleSubmit}>
-            Crear Producto
-          </button>
-        </div>
-
-        {/* 🔵 PREVIEW */}
-        <div className="col-md-6 d-flex align-items-center justify-content-center">
-          {preview ? (
-            <img
-              src={preview}
-              alt="preview"
-              style={{
-                maxWidth: "100%",
-                maxHeight: "400px",
-                borderRadius: "10px",
-                border: "1px solid #ddd",
-              }}
-            />
-          ) : (
-            <div className="text-muted text-center">
-              <p>Vista previa de imagen</p>
-            </div>
-          )}
-        </div>
-      </div>
+      <ProductoForm
+        form={form}
+        setForm={setForm}
+        proveedores={proveedores}
+        onSubmit={handleSubmit}
+        fileRef={fileRef}
+        setFile={setFile}
+        preview={preview}
+        setPreview={setPreview}
+        textoBoton="Crear Producto"
+      />
     </div>
   );
 }
