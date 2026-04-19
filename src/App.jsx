@@ -20,11 +20,13 @@ import AdminProveedores from "./components/AdminProveedores";
 import StockBajoPorProveedor from "./pages/StockBajoPorProveedor";
 import ProductosAdmin from "./pages/ProductosAdmin";
 import EditarProducto from "./pages/EditarProducto";
+import UsuariosAdmin from "./pages/UsuariosAdmin";
 
 // 🔥 Wrapper para usar location
 function AppContent({ token, setToken }) {
   const location = useLocation();
   const rol = localStorage.getItem("rol");
+  const username = localStorage.getItem("username");
 
   // 🔥 Ocultar navbar en login/register
   const hideNavbar =
@@ -52,7 +54,7 @@ function AppContent({ token, setToken }) {
         {/* 🔒 privadas */}
         <Route
           path="/productos"
-          element={token ? <Productos token={token} /> : <Navigate to="/" />}
+          element={token ? <Productos token={token} username={username} /> : <Navigate to="/" />}
         />
 
         <Route
@@ -129,6 +131,20 @@ function AppContent({ token, setToken }) {
             token && rol === "ADMIN" ? <EditarProducto /> : <Navigate to="/" />
           }
         />
+
+          
+<Route
+  path="/admin/usuarios"
+  element={
+    token && rol === "ADMIN" ? (
+      <UsuariosAdmin />
+    ) : (
+      <Navigate to="/" />
+    )
+  }
+/>
+
+
 
         {/* 🔥 fallback */}
         <Route path="*" element={<Navigate to="/" />} />

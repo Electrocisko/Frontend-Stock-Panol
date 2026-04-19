@@ -1,4 +1,5 @@
 import { CATEGORIAS } from "../api/categorias";
+import { UNIDADES, UNIDADES_LABELS } from "../api/unidades.js";
 
 const ProductoForm = ({
   form,
@@ -12,9 +13,13 @@ const ProductoForm = ({
   textoBoton = "Guardar",
 }) => {
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    const numberFields = ["proveedorId", "stockMinimo", "cantidad"];
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: numberFields.includes(name) ? Number(value) : value,
     });
   };
 
@@ -75,47 +80,52 @@ const ProductoForm = ({
           ))}
         </select>
 
-        <input
+        {/* ✅ Unidad de medida como select */}
+        <select
           name="unidadMedida"
-          className="form-control mb-2 mt-2"
-          placeholder="Unidad de medida"
+          className="form-control mt-2"
           value={form.unidadMedida}
           onChange={handleChange}
-        />
+        >
+          <option value="">Seleccione unidad</option>
+          {UNIDADES.map((u) => (
+            <option key={u} value={u}>
+              {UNIDADES_LABELS[u]}
+            </option>
+          ))}
+        </select>
 
-<div className="mb-3">
-  <div className="d-flex gap-3">
-    
-    {/* Stock mínimo */}
-    <div className="w-100">
-      <label className="form-label small text-muted">
-        Stock mínimo
-      </label>
-      <input
-        type="number"
-        name="stockMinimo"
-        className="form-control"
-        value={form.stockMinimo}
-        onChange={handleChange}
-      />
-    </div>
+        <div className="mb-3">
+          <div className="d-flex gap-3">
 
-    {/* Stock actual */}
-    <div className="w-100">
-      <label className="form-label small text-muted">
-        Cantidad Inicial
-      </label>
-      <input
-        type="number"
-        name="cantidad"
-        className="form-control"
-        value={form.cantidad}
-        onChange={handleChange}
-      />
-    </div>
+            <div className="w-100">
+              <label className="form-label small text-muted">
+                Stock mínimo
+              </label>
+              <input
+                type="number"
+                name="stockMinimo"
+                className="form-control"
+                value={form.stockMinimo}
+                onChange={handleChange}
+              />
+            </div>
 
-  </div>
-</div>
+            <div className="w-100">
+              <label className="form-label small text-muted">
+                Cantidad Inicial
+              </label>
+              <input
+                type="number"
+                name="cantidad"
+                className="form-control"
+                value={form.cantidad}
+                onChange={handleChange}
+              />
+            </div>
+
+          </div>
+        </div>
 
         <input
           name="ubicacion"

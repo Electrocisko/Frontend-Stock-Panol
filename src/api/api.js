@@ -172,3 +172,33 @@ export const actualizarProducto = async (id, data) => {
 
   return await res.json();
 };
+
+export const resetPassword = async (userId, newPassword, token) => {
+  const res = await fetch(`http://localhost:8080/usuarios/${userId}/reset-password`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ newPassword })
+  });
+
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error(error);
+  }
+
+  return res.text();
+};
+
+export const getUsuarios = async (token) => {
+  const res = await fetch("http://localhost:8080/usuarios", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  if (!res.ok) throw new Error("Error al obtener usuarios");
+
+  return res.json();
+};

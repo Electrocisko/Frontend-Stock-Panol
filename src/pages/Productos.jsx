@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { CATEGORIAS } from "../api/categorias.js";
 import ProductCard from "../components/ProductCard.jsx";
 
-export default function Productos({ token }) {
+export default function Productos({ token , username}) {
   const [productos, setProductos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
@@ -13,6 +13,7 @@ export default function Productos({ token }) {
 
   useEffect(() => {
     getProductos(token).then((data) => {
+        
       if (data) setProductos(data);
     });
   }, []);
@@ -20,6 +21,8 @@ export default function Productos({ token }) {
   const productosFiltrados = productos
     .filter((p) => {
       const texto = busqueda.toLowerCase();
+
+    
 
       const coincideBusqueda =
         p.codigo.toLowerCase().includes(texto) ||
@@ -44,7 +47,9 @@ export default function Productos({ token }) {
   return (
     <>
       <div className="container mt-5">
+
         <h2>Productos</h2>
+        <p className="text-muted">Bienvenido, {username}</p>
 
         <div className="row mb-3 g-2">
           {/* 🔍 BUSCADOR GENERAL */}
