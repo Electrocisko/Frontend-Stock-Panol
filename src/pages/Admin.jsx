@@ -31,6 +31,10 @@ export default function Admin() {
         <Link to="/admin/productos" className="btn btn-outline-dark w-100">
           Editar Productos
         </Link>
+
+        <Link to="/admin/usuarios" className="btn btn-outline-dark w-100">
+          Usuarios
+        </Link>
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProductos } from "../api/api";
 import { useNavigate } from "react-router-dom";
-import ProductCard from "../components/ProductCard";
 import { CATEGORIAS } from "../api/categorias";
 
 export default function ProductosAdmin() {

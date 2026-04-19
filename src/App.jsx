@@ -54,7 +54,13 @@ function AppContent({ token, setToken }) {
         {/* 🔒 privadas */}
         <Route
           path="/productos"
-          element={token ? <Productos token={token} username={username} /> : <Navigate to="/" />}
+          element={
+            token ? (
+              <Productos token={token} username={username} />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
         />
 
         <Route
@@ -132,19 +138,14 @@ function AppContent({ token, setToken }) {
           }
         />
 
-          
-<Route
-  path="/admin/usuarios"
-  element={
-    token && rol === "ADMIN" ? (
-      <UsuariosAdmin />
-    ) : (
-      <Navigate to="/" />
-    )
-  }
-/>
+        <Route
+          path="/admin/usuarios"
+          element={
+            token && rol === "ADMIN" ? <UsuariosAdmin /> : <Navigate to="/" />
+          }
+        />
 
-
+        
 
         {/* 🔥 fallback */}
         <Route path="*" element={<Navigate to="/" />} />
