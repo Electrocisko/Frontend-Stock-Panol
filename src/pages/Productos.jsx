@@ -3,19 +3,18 @@ import { getProductos } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { CATEGORIAS } from "../api/categorias.js";
 import ProductCard from "../components/ProductCard.jsx";
-  import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function Productos({ token , username}) {
+export default function Productos({ token, username }) {
   const [productos, setProductos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
   const navigate = useNavigate();
   const rol = localStorage.getItem("rol");
-
+  const nombre = localStorage.getItem("nombre");
 
   useEffect(() => {
     getProductos(token).then((data) => {
-        
       if (data) setProductos(data);
     });
   }, []);
@@ -23,8 +22,6 @@ export default function Productos({ token , username}) {
   const productosFiltrados = productos
     .filter((p) => {
       const texto = busqueda.toLowerCase();
-
-    
 
       const coincideBusqueda =
         p.codigo.toLowerCase().includes(texto) ||
@@ -49,22 +46,19 @@ export default function Productos({ token , username}) {
   return (
     <>
       <div className="container mt-5">
-
         <div className="position-relative mb-4">
+          {/* Botón arriba izquierda */}
+          <Link
+            to="/admin"
+            className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+          >
+            ← Volver
+          </Link>
 
-  {/* Botón arriba izquierda */}
-  <Link
-    to="/admin"
-    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
-  >
-    ← Volver
-  </Link>
-
-  {/* Título centrado */}
-  <h2 className="text-center m-0">Productos</h2>
-
-</div>
-        <p className="text-muted">Bienvenido, {username}</p>
+          {/* Título centrado */}
+          <h2 className="text-center m-0">Productos</h2>
+        </div>
+        <p className="text-muted">LOGEADO: {nombre}</p>
 
         <div className="row mb-3 g-2">
           {/* 🔍 BUSCADOR GENERAL */}
@@ -109,7 +103,7 @@ export default function Productos({ token , username}) {
               }}
               style={{ cursor: "pointer" }}
             >
-             <ProductCard p={p} />
+              <ProductCard p={p} />
             </div>
           ))}
           {productosFiltrados.length === 0 && (

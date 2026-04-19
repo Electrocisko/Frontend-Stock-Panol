@@ -25,6 +25,7 @@ export default function Login({ setToken }) {
     // 🔥 guardar sesión
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("rol", res.data.rol);
+    localStorage.setItem("nombre", res.data.nombre);
 
     // 🔥 actualizar estado global
     setToken(res.data.token);
