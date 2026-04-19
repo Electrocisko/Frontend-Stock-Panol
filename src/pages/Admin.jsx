@@ -1,40 +1,39 @@
 import { Link } from "react-router-dom";
 
+const items = [
+  { to: "/admin/crear", label: "Ingresar Producto Nuevo" },
+  { to: "/productos", label: "Ingreso / Salida de Productos" },
+  { to: "/movimientos", label: "Ver Movimientos" },
+  { to: "/admin/stock-bajo", label: "Stock Bajo por Proveedor" },
+  { to: "/admin/proveedores", label: "Registrar Proveedor" },
+  { to: "/admin/productos", label: "Editar Productos" },
+  { to: "/admin/usuarios", label: "Usuarios" },
+];
+
 export default function Admin() {
   return (
-    <div className="container mt-5">
+    <div className="container py-5">
       <h1 className="mb-4 text-center text-md-start">
         Panel de Administración
       </h1>
 
-      <div className="d-flex flex-column flex-md-row gap-3">
-        <Link to="/admin/crear" className="btn btn-outline-dark w-100">
-          Ingresar Producto Nuevo
-        </Link>
-
-        <Link to="/productos" className="btn btn-outline-dark w-100">
-          Ingreso / Salida de Productos
-        </Link>
-
-        <Link to="/movimientos" className="btn btn-outline-dark w-100">
-          Ver Movimientos
-        </Link>
-
-        <Link to="/admin/stock-bajo" className="btn btn-outline-dark w-100">
-          Stock Bajo por Proveedor
-        </Link>
-
-        <Link to="/admin/proveedores" className="btn btn-outline-dark w-100">
-          Registrar Proveedor
-        </Link>
-
-        <Link to="/admin/productos" className="btn btn-outline-dark w-100">
-          Editar Productos
-        </Link>
-
-        <Link to="/admin/usuarios" className="btn btn-outline-dark w-100">
-          Usuarios
-        </Link>
+      <div className="row g-5 gx-5 gy-4">
+        {items.map((item, i) => (
+          <div key={i} className="col-12 col-sm-6 col-lg-4 col-xl-3">
+            <Link
+              to={item.to}
+              className="text-decoration-none"
+            >
+              <div className="card h-100 shadow-sm  admin-card">
+                <div className="card-body d-flex align-items-center justify-content-center text-center">
+                  <span className="fw-semibold">
+                    {item.label}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );
