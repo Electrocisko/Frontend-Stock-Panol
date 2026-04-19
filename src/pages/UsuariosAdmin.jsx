@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { getUsuarios, resetPassword } from "../api/api";
+import { Table, Button, Modal, Form, Badge } from "react-bootstrap";
 
 export default function UsuariosAdmin() {
-
   const [usuarios, setUsuarios] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [newPassword, setNewPassword] = useState("");
+  const [show, setShow] = useState(false);
 
   const token = localStorage.getItem("token");
   const rol = localStorage.getItem("rol");
@@ -23,49 +24,88 @@ export default function UsuariosAdmin() {
     }
   };
 
-  const handleReset = (id) => {
+  const handleOpen = (id) => {
     setSelectedUser(id);
+    setShow(true);
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    setSelectedUser(null);
+    setNewPassword("");
   };
 
   const handleSubmit = async () => {
     try {
       await resetPassword(selectedUser, newPassword, token);
       alert("Password reseteado");
-      setSelectedUser(null);
-      setNewPassword("");
+      handleClose();
     } catch (err) {
       alert(err.message);
     }
   };
 
   return (
-    <div>
-      <h2>Usuarios</h2>
+    <div className="container py-4">
+      <h2 className="mb-4">Usuarios</h2>
 
-      {usuarios.map(u => (
-        <div key={u.id}>
-         {u.username} - {String(u.rol)}
+      <Table hover responsive>
+        <thead>
+          <tr>
+            <th className="text-start">Usuario</th>
+            <th>Username</th>
+            <th>Rol</th>
+            {rol === "ADMIN" && <th className="text-end">Acciones</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {usuarios.map((u) => (
+            <tr key={u.id}>
+              <td className="text-start">{u.nombre} {u.apellido}</td>
+              <td>{u.username}</td>
+              <td>
+                <Badge bg="secondary">{u.rol}</Badge>
+              </td>
+              {rol === "ADMIN" && (
+                <td className="text-end">
+                  <Button
+                    variant="outline-dark"
+                    size="sm"
+                    onClick={() => handleOpen(u.id)}
+                  >
+                    Reset Password
+                  </Button>
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </Table>
 
-          {rol === "ADMIN" && (
-            <button onClick={() => handleReset(u.id)}>
-              Reset Password
-            </button>
-          )}
-        </div>
-      ))}
+      {/* Modal */}
+      <Modal show={show} onHide={handleClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Resetear Password</Modal.Title>
+        </Modal.Header>
 
-      {selectedUser && (
-        <div style={{ marginTop: "20px" }}>
-          <input
+        <Modal.Body>
+          <Form.Control
             type="password"
             placeholder="Nueva password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           />
-          <button onClick={handleSubmit}>Confirmar</button>
-          <button onClick={() => setSelectedUser(null)}>Cancelar</button>
-        </div>
-      )}
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button variant="dark" onClick={handleSubmit}>
+            Confirmar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
