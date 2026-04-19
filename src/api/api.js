@@ -1,5 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
+// LOGIN
 export const login = async (data) => {
   const res = await fetch(`${API_URL}/usuarios/login`, {
     method: "POST",
@@ -11,7 +12,6 @@ export const login = async (data) => {
 
   const body = await res.json();
 
-  // 🔥 ERROR (ej: 401)
   if (!res.ok) {
     return {
       ok: false,
@@ -19,42 +19,79 @@ export const login = async (data) => {
     };
   }
 
-  // 🔥 OK
   return {
     ok: true,
     data: body,
   };
 };
 
-export const crearProducto = async (data, token) => {
-  const res = await fetch(`${API_URL}/productos`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
+// FETCH CON AUTH (centralizado)
+export const fetchConAuth = async (endpoint, options = {}) => {
+  const token = localStorage.getItem("token");
 
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+        Authorization: token ? `Bearer ${token}` : "",
+      },
+    });
+
+    if (res.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("rol");
+      window.location.href = "/";
+      return null;
+    }
+
+    return res;
+  } catch (error) {
+    console.error("Error de red:", error);
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("rol");
+    window.location.href = "/";
+
+    return null;
+  }
 };
 
+// PRODUCTOS
 export const getProductos = async () => {
   const res = await fetchConAuth("/productos");
-
   if (!res) return null;
-
   return await res.json();
 };
 
 export const getProductoById = async (id) => {
   const res = await fetchConAuth(`/productos/${id}`);
-
   if (!res) return null;
-
   return await res.json();
 };
 
+export const crearProducto = async (data) => {
+  const res = await fetchConAuth("/productos", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  if (!res) return null;
+  return await res.json();
+};
+
+export const actualizarProducto = async (id, data) => {
+  const res = await fetchConAuth(`/productos/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+
+  if (!res) return null;
+  return await res.json();
+};
+
+// MOVIMIENTOS
 export const registrarEntrada = async (data) => {
   const res = await fetchConAuth("/movimientos/entrada", {
     method: "POST",
@@ -70,51 +107,21 @@ export const registrarSalida = async (data) => {
     body: JSON.stringify(data),
   });
 
-  return res; // 🔥 importante devolver res, no json
-};
-
-export const fetchConAuth = async (endpoint, options = {}) => {
-  const token = localStorage.getItem("token");
-
-  try {
-    const res = await fetch(`${API_URL}${endpoint}`, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {}),
-        Authorization: token ? `Bearer ${token}` : "",
-      },
-    });
-
-    // 🔥 TOKEN VENCIDO / NO AUTORIZADO
-    if (res.status === 401) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("rol");
-
-      // redirigir al login
-      window.location.href = "/";
-
-      return null; // 🔥 cortar ejecución
-    }
-
-    return res;
-  } catch (error) {
-    console.error("Error de red:", error);
-
-    // opcional: podés también limpiar sesión
-    localStorage.removeItem("token");
-    localStorage.removeItem("rol");
-
-    window.location.href = "/";
-
-    return null;
-  }
+  return res;
 };
 
 export const getMovimientos = async () => {
   const res = await fetchConAuth("/movimientos");
+  if (!res) return null;
+  return await res.json();
+};
+
+// USUARIOS
+export const getUsuarios = async () => {
+  const res = await fetchConAuth("/usuarios");
 
   if (!res) return null;
+  if (!res.ok) throw new Error("Error al obtener usuarios");
 
   return await res.json();
 };
@@ -143,6 +150,19 @@ export const registrarUsuario = async (data) => {
   };
 };
 
+export const resetPassword = async (userId, newPassword) => {
+  const res = await fetchConAuth(`/usuarios/${userId}/reset-password`, {
+    method: "PUT",
+    body: JSON.stringify({ newPassword }),
+  });
+
+  if (!res) return null;
+  if (!res.ok) throw new Error("Error al resetear password");
+
+  return await res.text();
+};
+
+// PROVEEDORES
 export const crearProveedor = async (data) => {
   const res = await fetchConAuth("/proveedores", {
     method: "POST",
@@ -150,7 +170,6 @@ export const crearProveedor = async (data) => {
   });
 
   if (!res) return null;
-
   return await res.json();
 };
 
@@ -158,47 +177,5 @@ export const getProveedores = async () => {
   const res = await fetchConAuth("/proveedores");
 
   if (!res) return null;
-
   return await res.json();
-};
-
-export const actualizarProducto = async (id, data) => {
-  const res = await fetchConAuth(`/productos/${id}`, {
-    method: "PUT",
-    body: JSON.stringify(data),
-  });
-
-  if (!res) return null;
-
-  return await res.json();
-};
-
-export const resetPassword = async (userId, newPassword, token) => {
-  const res = await fetch(`http://localhost:8080/usuarios/${userId}/reset-password`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify({ newPassword })
-  });
-
-  if (!res.ok) {
-    const error = await res.text();
-    throw new Error(error);
-  }
-
-  return res.text();
-};
-
-export const getUsuarios = async (token) => {
-  const res = await fetch("http://localhost:8080/usuarios", {
-    headers: {
-      "Authorization": `Bearer ${token}`
-    }
-  });
-
-  if (!res.ok) throw new Error("Error al obtener usuarios");
-
-  return res.json();
 };
