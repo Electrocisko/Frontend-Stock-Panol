@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { crearProducto, getProveedores } from "../api/api";
 import { subirImagen } from "../api/cloudinary";
 import ProductoForm from "../components/ProductoForm";
+import { Link } from "react-router-dom";
 
 export default function CrearProducto({ token }) {
   const [form, setForm] = useState({
@@ -69,7 +70,20 @@ export default function CrearProducto({ token }) {
 
   return (
     <div className="container mt-5">
-      <h2>Nuevo Producto</h2>
+     <div className="position-relative mb-4">
+
+  {/* Botón arriba izquierda */}
+  <Link
+    to="/admin"
+    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+  >
+    ← Volver
+  </Link>
+
+  {/* Título centrado */}
+  <h2 className="text-center m-0">Crear Producto</h2>
+
+</div>
 
       <ProductoForm
         form={form}

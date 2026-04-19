@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProductos } from "../api/api";
+import { Link } from "react-router-dom";
 
 export default function StockBajoPorProveedor() {
   const [agrupados, setAgrupados] = useState({});
@@ -33,7 +34,20 @@ export default function StockBajoPorProveedor() {
 
   return (
     <div className="container mt-4">
-      <h2>Stock Bajo por Proveedor</h2>
+   <div className="position-relative mb-4">
+
+  {/* Botón arriba izquierda */}
+  <Link
+    to="/admin"
+    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+  >
+    ← Volver
+  </Link>
+
+  {/* Título centrado */}
+  <h2 className="text-center m-0">Stock Bajo por Proveedor</h2>
+
+</div>
 
       {Object.keys(agrupados).length === 0 && (
         <p className="mt-3 text-muted">No hay productos con stock bajo</p>

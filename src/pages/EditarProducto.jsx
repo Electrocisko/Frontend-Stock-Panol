@@ -7,6 +7,7 @@ import {
 } from "../api/api";
 import { subirImagen } from "../api/cloudinary";
 import ProductoForm from "../components/ProductoForm";
+import { Link } from "react-router-dom";
 
 export default function EditarProducto() {
   const { id } = useParams();
@@ -79,7 +80,21 @@ export default function EditarProducto() {
 
   return (
     <div className="container mt-5">
-      <h2>Editar Producto</h2>
+  <div className="position-relative mb-4">
+
+  {/* Botón arriba izquierda */}
+  <Link
+    to="/admin"
+    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+  >
+    ← Volver
+  </Link>
+
+  {/* Título centrado */}
+  <h2 className="text-center m-0">Editar</h2>
+
+</div>
+
 
       <ProductoForm
         form={form}

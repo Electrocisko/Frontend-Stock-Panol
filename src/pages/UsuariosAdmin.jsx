@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getUsuarios, resetPassword } from "../api/api";
 import { Table, Button, Modal, Form, Badge } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export default function UsuariosAdmin() {
   const [usuarios, setUsuarios] = useState([]);
@@ -47,7 +48,20 @@ export default function UsuariosAdmin() {
 
   return (
     <div className="container py-4">
-      <h2 className="mb-4">Usuarios</h2>
+ <div className="position-relative mb-4">
+
+  {/* Botón arriba izquierda */}
+  <Link
+    to="/admin"
+    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+  >
+    ← Volver
+  </Link>
+
+  {/* Título centrado */}
+  <h2 className="text-center m-0">Usuarios</h2>
+
+</div>
 
       <Table hover responsive>
         <thead>
@@ -61,7 +75,9 @@ export default function UsuariosAdmin() {
         <tbody>
           {usuarios.map((u) => (
             <tr key={u.id}>
-              <td className="text-start">{u.nombre} {u.apellido}</td>
+              <td className="text-start">
+                {u.nombre} {u.apellido}
+              </td>
               <td>{u.username}</td>
               <td>
                 <Badge bg="secondary">{u.rol}</Badge>

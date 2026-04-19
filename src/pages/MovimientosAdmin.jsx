@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMovimientos } from "../api/api";
+import { Link } from "react-router-dom";
 
 export default function MovimientosAdmin() {
 
@@ -14,7 +15,20 @@ export default function MovimientosAdmin() {
   return (
     <div className="container mt-5">
 
-      <h2 className="mb-4">Movimientos</h2>
+     <div className="position-relative mb-4">
+
+  {/* Botón arriba izquierda */}
+  <Link
+    to="/admin"
+    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+  >
+    ← Volver
+  </Link>
+
+  {/* Título centrado */}
+  <h2 className="text-center m-0">Movimientos</h2>
+
+</div>
 
       {/* 🖥️ TABLA (desktop) */}
       <div className="table-responsive d-none d-md-block">

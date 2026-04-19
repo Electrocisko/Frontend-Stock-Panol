@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getProductos } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { CATEGORIAS } from "../api/categorias";
+import { Link } from "react-router-dom";
 
 export default function ProductosAdmin() {
   const [productos, setProductos] = useState([]);
@@ -41,7 +42,26 @@ useEffect(() => {
 
   return (
     <div className="container mt-5">
-      <h2>Editar Productos</h2>
+    
+
+<div className="position-relative mb-4">
+
+  {/* Botón arriba izquierda */}
+  <Link
+    to="/admin"
+    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+  >
+    ← Volver
+  </Link>
+
+  {/* Título centrado */}
+  <h2 className="text-center m-0">Editar Productos</h2>
+
+</div>
+
+
+
+
 
       <div className="row mb-3 g-2">
         {/* 🔍 BUSCADOR GENERAL */}

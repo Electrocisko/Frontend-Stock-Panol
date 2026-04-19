@@ -3,6 +3,7 @@ import { getProductos } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { CATEGORIAS } from "../api/categorias.js";
 import ProductCard from "../components/ProductCard.jsx";
+  import { Link } from "react-router-dom";
 
 export default function Productos({ token , username}) {
   const [productos, setProductos] = useState([]);
@@ -10,6 +11,7 @@ export default function Productos({ token , username}) {
   const [categoria, setCategoria] = useState("");
   const navigate = useNavigate();
   const rol = localStorage.getItem("rol");
+
 
   useEffect(() => {
     getProductos(token).then((data) => {
@@ -48,7 +50,20 @@ export default function Productos({ token , username}) {
     <>
       <div className="container mt-5">
 
-        <h2>Productos</h2>
+        <div className="position-relative mb-4">
+
+  {/* Botón arriba izquierda */}
+  <Link
+    to="/admin"
+    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+  >
+    ← Volver
+  </Link>
+
+  {/* Título centrado */}
+  <h2 className="text-center m-0">Productos</h2>
+
+</div>
         <p className="text-muted">Bienvenido, {username}</p>
 
         <div className="row mb-3 g-2">

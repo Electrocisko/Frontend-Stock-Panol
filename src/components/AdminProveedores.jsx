@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { crearProveedor } from "../api/api";
+import { Link } from "react-router-dom";
 
 export default function AdminProveedores() {
   const [form, setForm] = useState({
@@ -37,7 +38,18 @@ export default function AdminProveedores() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-3">Crear Proveedor</h2>
+      <div className="position-relative mb-4">
+        {/* Botón arriba izquierda */}
+        <Link
+          to="/admin"
+          className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+        >
+          ← Volver
+        </Link>
+
+        {/* Título centrado */}
+        <h2 className="text-center m-0">Registrar Proveedor</h2>
+      </div>
 
       <form onSubmit={handleSubmit}>
         {/* Nombre */}
@@ -76,16 +88,10 @@ export default function AdminProveedores() {
           />
         </div>
 
-        <button className="btn btn-dark w-100">
-          Guardar
-        </button>
+        <button className="btn btn-dark w-100">Guardar</button>
       </form>
 
-      {mensaje && (
-        <div className="mt-3 alert alert-info">
-          {mensaje}
-        </div>
-      )}
+      {mensaje && <div className="mt-3 alert alert-info">{mensaje}</div>}
     </div>
   );
 }
