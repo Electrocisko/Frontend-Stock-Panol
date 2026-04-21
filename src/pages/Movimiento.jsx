@@ -27,14 +27,7 @@ export default function Movimiento({ token }) {
     };
 
     if (tipo === "ENTRADA") {
-
-      const res = await registrarEntrada(data, token);
-
-// SEGUIR ACA
-
-
-
-      
+      await registrarEntrada(data, token);
     } else {
       await registrarSalida(data, token);
     }
@@ -43,30 +36,35 @@ export default function Movimiento({ token }) {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-3 mt-md-5">
       <div
-        className="p-4 shadow-sm bg-white"
+        className="p-3 p-md-4 shadow-sm bg-white"
         style={{
           borderRadius: "12px",
           border: "1px solid #e9ecef",
         }}
       >
-        <h2 className="mb-4">Registrar Movimiento</h2>
+        {/* 🔹 Título */}
+        <h2 className="mb-3 mb-md-4 fs-5 fs-md-3 text-center">
+          Registrar Movimiento
+        </h2>
 
         <div className="row align-items-center">
           {/* 🔵 INFO */}
-          <div className="col-md-6">
-            <h4>{producto.nombre}</h4>
+          <div className="col-12 col-md-6">
+            <h4 className="fs-6 fs-md-4">{producto.nombre}</h4>
 
-            <p>
+            <p className="mb-1 small">
               <strong>Código:</strong> {producto.codigo}
             </p>
 
-            <p>
+            <p className="mb-1 small">
               <strong>Stock actual:</strong>{" "}
               <span
                 className={
-                  producto.cantidad < producto.stockMinimo ? "text-danger" : ""
+                  producto.cantidad < producto.stockMinimo
+                    ? "text-danger"
+                    : ""
                 }
               >
                 {producto.cantidad}
@@ -74,8 +72,8 @@ export default function Movimiento({ token }) {
             </p>
           </div>
 
-          {/* 🖼️ IMAGEN */}
-          <div className="col-md-6 text-center">
+          {/* 🖼️ IMAGEN (oculta en mobile) */}
+          <div className="col-md-6 text-center d-none d-md-block">
             {producto.urlImagen ? (
               <img
                 src={producto.urlImagen}
@@ -95,12 +93,14 @@ export default function Movimiento({ token }) {
           </div>
         </div>
       </div>
-      <div className="mt-4">
+
+      {/* 🔽 FORM */}
+      <div className="mt-3 mt-md-4">
         {/* 🔹 Tipo */}
-        <div className="mb-3">
-          <label className="form-label">Tipo</label>
+        <div className="mb-2 mb-md-3">
+          <label className="form-label small">Tipo</label>
           <select
-            className="form-control"
+            className="form-control form-control-sm"
             value={tipo}
             onChange={(e) => setTipo(e.target.value)}
           >
@@ -110,28 +110,31 @@ export default function Movimiento({ token }) {
         </div>
 
         {/* 🔹 Cantidad */}
-        <div className="mb-3">
-          <label className="form-label">Cantidad</label>
+        <div className="mb-2 mb-md-3">
+          <label className="form-label small">Cantidad</label>
           <input
             type="number"
-            className="form-control"
+            className="form-control form-control-sm"
             value={cantidad}
             onChange={(e) => setCantidad(e.target.value)}
           />
         </div>
 
         {/* 🔹 Motivo */}
-        <div className="mb-3">
-          <label className="form-label">Motivo</label>
+        <div className="mb-2 mb-md-3">
+          <label className="form-label small">Motivo</label>
           <input
-            className="form-control"
+            className="form-control form-control-sm"
             value={motivo}
             onChange={(e) => setMotivo(e.target.value)}
           />
         </div>
 
         {/* 🔥 Botón */}
-        <button className="btn btn-dark w-100" onClick={handleSubmit}>
+        <button
+          className="btn btn-dark w-100 mt-2"
+          onClick={handleSubmit}
+        >
           Confirmar Movimiento
         </button>
       </div>
