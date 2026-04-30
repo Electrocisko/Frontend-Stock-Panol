@@ -36,7 +36,7 @@ const ProductCard = ({ p }) => {
         ) : (
           <img
             src="public/Logo Vier.webp"
-            className="card-img-top"
+            className="card-img-top opacity-50"
             alt="Sin imagen"
             style={{
               height: "140px",
