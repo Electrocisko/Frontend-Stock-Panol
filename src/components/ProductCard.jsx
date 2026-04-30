@@ -34,12 +34,16 @@ const ProductCard = ({ p }) => {
             }}
           />
         ) : (
-          <div
-            className="d-flex align-items-center justify-content-center bg-light"
-            style={{ height: "140px" }}
-          >
-            <span className="text-muted small">Sin imagen</span>
-          </div>
+          <img
+            src="public/Logo Vier.webp"
+            className="card-img-top"
+            alt="Sin imagen"
+            style={{
+              height: "140px",
+              objectFit: "contain",
+              padding: "10px",
+            }}
+          />
         )}
       </div>
 

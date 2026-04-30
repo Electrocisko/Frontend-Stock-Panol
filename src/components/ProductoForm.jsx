@@ -15,11 +15,19 @@ const ProductoForm = ({
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    const numberFields = ["proveedorId", "stockMinimo", "cantidad"];
+    // 🔥 SOLO proveedorId como número
+    if (name === "proveedorId") {
+      setForm({
+        ...form,
+        [name]: value ? Number(value) : "",
+      });
+      return;
+    }
 
+    // ✅ el resto como string (incluye cantidad y stockMinimo)
     setForm({
       ...form,
-      [name]: numberFields.includes(name) ? Number(value) : value,
+      [name]: value,
     });
   };
 
@@ -32,7 +40,7 @@ const ProductoForm = ({
           name="nombre"
           className="form-control mb-2"
           placeholder="Nombre"
-          value={form.nombre}
+          value={form.nombre ?? ""}
           onChange={handleChange}
         />
 
@@ -40,7 +48,7 @@ const ProductoForm = ({
           name="codigo"
           className="form-control mb-2"
           placeholder="Código"
-          value={form.codigo}
+          value={form.codigo ?? ""}
           onChange={handleChange}
         />
 
@@ -48,14 +56,14 @@ const ProductoForm = ({
           name="descripcion"
           className="form-control mb-2"
           placeholder="Descripción"
-          value={form.descripcion}
+          value={form.descripcion ?? ""}
           onChange={handleChange}
         />
 
         <select
           name="categoria"
           className="form-control"
-          value={form.categoria}
+          value={form.categoria ?? ""}
           onChange={handleChange}
         >
           <option value="">Seleccionar categoría</option>
@@ -69,7 +77,7 @@ const ProductoForm = ({
         <select
           name="proveedorId"
           className="form-control mt-2"
-          value={form.proveedorId}
+          value={form.proveedorId ?? ""}
           onChange={handleChange}
         >
           <option value="">Seleccionar proveedor</option>
@@ -80,11 +88,11 @@ const ProductoForm = ({
           ))}
         </select>
 
-        {/* ✅ Unidad de medida como select */}
+        {/* Unidad de medida */}
         <select
           name="unidadMedida"
           className="form-control mt-2"
-          value={form.unidadMedida}
+          value={form.unidadMedida ?? ""}
           onChange={handleChange}
         >
           <option value="">Seleccione unidad</option>
@@ -105,8 +113,9 @@ const ProductoForm = ({
               <input
                 type="number"
                 name="stockMinimo"
+                inputMode="numeric"
                 className="form-control"
-                value={form.stockMinimo}
+                value={form.stockMinimo ?? ""}
                 onChange={handleChange}
               />
             </div>
@@ -118,8 +127,9 @@ const ProductoForm = ({
               <input
                 type="number"
                 name="cantidad"
+                inputMode="numeric"
                 className="form-control"
-                value={form.cantidad}
+                value={form.cantidad ?? ""}
                 onChange={handleChange}
               />
             </div>
@@ -131,7 +141,7 @@ const ProductoForm = ({
           name="ubicacion"
           className="form-control mb-3"
           placeholder="Ubicación"
-          value={form.ubicacion}
+          value={form.ubicacion ?? ""}
           onChange={handleChange}
         />
 

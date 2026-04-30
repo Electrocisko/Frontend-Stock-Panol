@@ -21,6 +21,7 @@ import StockBajoPorProveedor from "./pages/StockBajoPorProveedor";
 import ProductosAdmin from "./pages/ProductosAdmin";
 import EditarProducto from "./pages/EditarProducto";
 import UsuariosAdmin from "./pages/UsuariosAdmin";
+import ProductoDetalle from "./pages/ProductoDetalle";
 
 // 🔥 Wrapper para usar location
 function AppContent({ token, setToken }) {
@@ -144,6 +145,8 @@ function AppContent({ token, setToken }) {
             token && rol === "ADMIN" ? <UsuariosAdmin /> : <Navigate to="/" />
           }
         />
+
+        <Route path="/admin/productos/:id" element={<ProductoDetalle />} />
 
         
 

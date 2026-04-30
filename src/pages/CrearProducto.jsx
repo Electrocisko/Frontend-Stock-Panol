@@ -13,7 +13,7 @@ export default function CrearProducto({ token }) {
     unidadMedida: "",
     stockMinimo: 0,
     ubicacion: "",
-    cantidad: 0,
+    cantidad: "",
     proveedorId: "",
   });
 
