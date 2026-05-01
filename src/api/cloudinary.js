@@ -12,7 +12,7 @@ export const subirImagen = async (file) => {
 
   const data = await res.json();
 
-  return data
+  return data.secure_url;
 };
 
 // src/utils/cloudinary.js

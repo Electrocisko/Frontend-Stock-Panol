@@ -66,6 +66,7 @@ export const fetchConAuth = async (endpoint, options = {}) => {
     try {
       const body = await res.json();
       errorMessage = body.message || body.detail || errorMessage;
+    // eslint-disable-next-line no-empty
     } catch {}
 
     throw new Error(errorMessage);
