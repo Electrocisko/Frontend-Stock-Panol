@@ -4,7 +4,7 @@ import { subirImagen } from "../api/cloudinary";
 import ProductoForm from "../components/ProductoForm";
 import { Link } from "react-router-dom";
 
-export default function CrearProducto({ token }) {
+export default function CrearProducto() {
   const [form, setForm] = useState({
     nombre: "",
     codigo: "",
@@ -24,66 +24,64 @@ export default function CrearProducto({ token }) {
   const fileRef = useRef();
 
   useEffect(() => {
-    getProveedores().then((data) => {
-      if (data) setProveedores(data);
-    });
+    getProveedores().then(setProveedores);
   }, []);
 
   const handleSubmit = async () => {
-    let imageUrl = "";
+    try {
+      let imageUrl = "";
 
-    if (file) {
-      const img = await subirImagen(file);
-      imageUrl = img.secure_url;
-    }
+      if (file) {
+        imageUrl = await subirImagen(file); // 🔥 ya devuelve URL
+      }
 
-    await crearProducto(
-      {
+      await crearProducto({
         ...form,
         proveedorId: form.proveedorId
           ? Number(form.proveedorId)
           : null,
         urlImagen: imageUrl,
-      },
-      token
-    );
+      });
 
-    alert("Producto creado");
+      alert("✅ Producto creado");
 
-    // reset
-    setForm({
-      nombre: "",
-      codigo: "",
-      descripcion: "",
-      categoria: "",
-      unidadMedida: "",
-      stockMinimo: 0,
-      ubicacion: "",
-      cantidad: 0,
-      proveedorId: "",
-    });
+      // reset
+      setForm({
+        nombre: "",
+        codigo: "",
+        descripcion: "",
+        categoria: "",
+        unidadMedida: "",
+        stockMinimo: 0,
+        ubicacion: "",
+        cantidad: 0,
+        proveedorId: "",
+      });
 
-    setFile(null);
-    setPreview(null);
-    fileRef.current.value = "";
+      setFile(null);
+      setPreview(null);
+      if (fileRef.current) fileRef.current.value = "";
+
+    } catch (error) {
+      console.error(error);
+
+      alert(error.message); // 🔥 ahora muestra "Codigo Duplicado"
+    }
   };
 
   return (
     <div className="container mt-5">
-     <div className="position-relative mb-4">
+      <div className="position-relative mb-4">
 
-  {/* Botón arriba izquierda */}
-  <Link
-    to="/admin"
-    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
-  >
-    ← Volver
-  </Link>
+        <Link
+          to="/admin"
+          className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+        >
+          ← Volver
+        </Link>
 
-  {/* Título centrado */}
-  <h2 className="text-center m-0">Crear Producto</h2>
-
-</div>
+        <h2 className="text-center m-0">Crear Producto</h2>
+      </div>
 
       <ProductoForm
         form={form}

@@ -1,61 +1,77 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-// LOGIN
+// LOGIN (no rompe tu flujo actual)
 export const login = async (data) => {
-  const res = await fetch(`${API_URL}/usuarios/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const res = await fetch(`${API_URL}/usuarios/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-  const body = await res.json();
+    const body = await res.json();
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return {
+        ok: false,
+        error:
+          body.message ||
+          body.detail ||
+          body.error ||
+          "Credenciales incorrectas",
+      };
+    }
+
+    return {
+      ok: true,
+      data: body,
+    };
+  } catch (error) {
+    console.error("Error login:", error);
+
     return {
       ok: false,
-      error: body.detail || "Error",
+      error: "Error de conexión",
     };
   }
-
-  return {
-    ok: true,
-    data: body,
-  };
 };
 
 // FETCH CON AUTH (centralizado)
 export const fetchConAuth = async (endpoint, options = {}) => {
   const token = localStorage.getItem("token");
 
-  try {
-    const res = await fetch(`${API_URL}${endpoint}`, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...(options.headers || {}),
-        Authorization: token ? `Bearer ${token}` : "",
-      },
-    });
+  const res = await fetch(`${API_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  });
 
-    if (res.status === 401) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("rol");
-      window.location.href = "/";
-      return null;
-    }
-
-    return res;
-  } catch (error) {
-    console.error("Error de red:", error);
-
+  // 🔴 SOLO 401 desloguea
+  if (res.status === 401) {
     localStorage.removeItem("token");
     localStorage.removeItem("rol");
     window.location.href = "/";
-
     return null;
   }
+
+  // 🔥 errores normales (no rompen sesión)
+  if (!res.ok) {
+    let errorMessage = "Error";
+
+    try {
+      const body = await res.json();
+      errorMessage = body.message || body.detail || errorMessage;
+    } catch {}
+
+    throw new Error(errorMessage);
+  }
+
+  return res;
 };
 
 // PRODUCTOS
@@ -98,7 +114,8 @@ export const registrarEntrada = async (data) => {
     body: JSON.stringify(data),
   });
 
-  return res;
+  if (!res) return null;
+  return await res.json();
 };
 
 export const registrarSalida = async (data) => {
@@ -107,7 +124,8 @@ export const registrarSalida = async (data) => {
     body: JSON.stringify(data),
   });
 
-  return res;
+  if (!res) return null;
+  return await res.json();
 };
 
 export const getMovimientos = async () => {
@@ -119,10 +137,7 @@ export const getMovimientos = async () => {
 // USUARIOS
 export const getUsuarios = async () => {
   const res = await fetchConAuth("/usuarios");
-
   if (!res) return null;
-  if (!res.ok) throw new Error("Error al obtener usuarios");
-
   return await res.json();
 };
 
@@ -138,16 +153,10 @@ export const registrarUsuario = async (data) => {
   const body = await res.json();
 
   if (!res.ok) {
-    return {
-      ok: false,
-      error: body.detail || "Error al registrar",
-    };
+    throw new Error(body.message || body.detail || "Error al registrar");
   }
 
-  return {
-    ok: true,
-    data: body,
-  };
+  return body;
 };
 
 export const resetPassword = async (userId, newPassword) => {
@@ -157,8 +166,6 @@ export const resetPassword = async (userId, newPassword) => {
   });
 
   if (!res) return null;
-  if (!res.ok) throw new Error("Error al resetear password");
-
   return await res.text();
 };
 
@@ -175,7 +182,6 @@ export const crearProveedor = async (data) => {
 
 export const getProveedores = async () => {
   const res = await fetchConAuth("/proveedores");
-
   if (!res) return null;
   return await res.json();
 };
