@@ -1,8 +1,5 @@
 import { getOptimizedImage } from "../api/cloudinary";
 
-
-
-
 const ProductCard = ({ p }) => {
   return (
     <div
@@ -14,7 +11,6 @@ const ProductCard = ({ p }) => {
     >
       {/* 🖼️ Imagen + overlay */}
       <div className="position-relative">
-
         {p.sinStock && (
           <span className="badge bg-danger position-absolute top-0 start-0 m-2">
             Sin stock
@@ -29,7 +25,8 @@ const ProductCard = ({ p }) => {
 
         {p.urlImagen ? (
           <img
-            src={getOptimizedImage(p.urlImagen,300)}
+            loading="lazy"
+            src={getOptimizedImage(p.urlImagen, 300)}
             className="card-img-top"
             alt={p.nombre}
             style={{
@@ -40,7 +37,7 @@ const ProductCard = ({ p }) => {
           />
         ) : (
           <img
-            src="public/Logo Vier.webp"
+            src="Logo Vier.webp"
             className="card-img-top opacity-50"
             alt="Sin imagen"
             style={{
@@ -98,8 +95,8 @@ const ProductCard = ({ p }) => {
               p.sinStock
                 ? "text-danger fw-bold"
                 : p.stockBajo
-                ? "text-warning fw-bold"
-                : "text-success fw-bold"
+                  ? "text-warning fw-bold"
+                  : "text-success fw-bold"
             }
           >
             {p.cantidad}
