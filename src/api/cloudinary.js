@@ -14,3 +14,14 @@ export const subirImagen = async (file) => {
 
   return data
 };
+
+// src/utils/cloudinary.js
+
+export const getOptimizedImage = (url, width = 300) => {
+  if (!url) return "";
+
+  return url.replace(
+    "/upload/",
+    `/upload/w_${width},c_limit,f_auto,q_auto/`
+  );
+};

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getProductoById } from "../api/api";
+import { getOptimizedImage } from "../api/cloudinary";
 
 export default function ProductoDetalle() {
   const { id } = useParams();
@@ -24,7 +25,7 @@ export default function ProductoDetalle() {
           {/* Imagen */}
           <div className="col-md-4">
             <img
-              src={producto.urlImagen}
+              src={getOptimizedImage( producto.urlImagen)}
               className="img-fluid rounded-start"
               alt={producto.nombre}
             />

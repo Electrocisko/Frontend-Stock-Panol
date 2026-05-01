@@ -1,3 +1,8 @@
+import { getOptimizedImage } from "../api/cloudinary";
+
+
+
+
 const ProductCard = ({ p }) => {
   return (
     <div
@@ -24,7 +29,7 @@ const ProductCard = ({ p }) => {
 
         {p.urlImagen ? (
           <img
-            src={p.urlImagen}
+            src={getOptimizedImage(p.urlImagen,300)}
             className="card-img-top"
             alt={p.nombre}
             style={{
