@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   getProductoById,
   actualizarProducto,
@@ -7,7 +7,6 @@ import {
 } from "../api/api";
 import { subirImagen } from "../api/cloudinary";
 import ProductoForm from "../components/ProductoForm";
-import { Link } from "react-router-dom";
 
 export default function EditarProducto() {
   const { id } = useParams();
@@ -23,6 +22,7 @@ export default function EditarProducto() {
     ubicacion: "",
     cantidad: 0,
     proveedorId: "",
+    urlImagen: "", // 🔥 IMPORTANTE
   });
 
   const [proveedores, setProveedores] = useState([]);
@@ -46,6 +46,7 @@ export default function EditarProducto() {
         ubicacion: data.ubicacion || "",
         cantidad: data.cantidad || 0,
         proveedorId: data.proveedorId || "",
+        urlImagen: data.urlImagen || "", // 🔥 clave
       });
 
       setPreview(data.urlImagen || null);
@@ -58,43 +59,43 @@ export default function EditarProducto() {
 
   // 🔹 guardar cambios
   const handleSubmit = async () => {
-    let imageUrl = preview;
+    try {
+      let imageUrl = form.urlImagen; // 🔥 SIEMPRE partir de acá
 
-    if (file) {
-      const img = await subirImagen(file);
-      imageUrl = img.secure_url;
+      if (file) {
+        imageUrl = await subirImagen(file); // 🔥 nueva imagen
+      }
+
+      await actualizarProducto(id, {
+        ...form,
+        proveedorId: form.proveedorId
+          ? Number(form.proveedorId)
+          : null,
+        urlImagen: imageUrl || null,
+      });
+
+      alert("Producto actualizado");
+      navigate("/admin/productos");
+
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
-
-    await actualizarProducto(id, {
-      ...form,
-      proveedorId: form.proveedorId
-        ? Number(form.proveedorId)
-        : null,
-      urlImagen: imageUrl,
-    });
-
-    alert("Producto actualizado");
-
-    navigate("/admin/productos"); // 🔥 volver
   };
 
   return (
     <div className="container mt-5">
-  <div className="position-relative mb-4">
+      <div className="position-relative mb-4">
 
-  {/* Botón arriba izquierda */}
-  <Link
-    to="/admin"
-    className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
-  >
-    ← Volver
-  </Link>
+        <Link
+          to="/admin"
+          className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
+        >
+          ← Volver
+        </Link>
 
-  {/* Título centrado */}
-  <h2 className="text-center m-0">Editar</h2>
-
-</div>
-
+        <h2 className="text-center m-0">Editar</h2>
+      </div>
 
       <ProductoForm
         form={form}
