@@ -186,3 +186,18 @@ export const getProveedores = async () => {
   if (!res) return null;
   return await res.json();
 };
+
+// EXPORTAR PRODUCTOS (Excel)
+export const exportarProductos = async () => {
+  const res = await fetchConAuth("/productos/exportar", {
+    method: "GET",
+    headers: {
+      // ⚠️ importante: NO mandar JSON acá
+    },
+  });
+
+  if (!res) return null;
+
+  const blob = await res.blob();
+  return blob;
+};
