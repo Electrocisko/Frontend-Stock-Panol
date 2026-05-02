@@ -8,6 +8,7 @@ export default function Register() {
     apellido: "",
     username: "",
     password: "",
+    checkpassword:""
   });
 
   const [error, setError] = useState("");
@@ -20,19 +21,31 @@ export default function Register() {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const res = await registrarUsuario(form);
+  if (form.password !== form.checkpassword) {
+    setError("No coincide password");
+    return;
+  }
 
-    if (!res.ok) {
-      setError(res.error);
-      return;
+  try {
+
+    const data = {
+      "nombre": form.nombre,
+      "apellido": form.apellido,
+      "username": form.username,
+      "password": form.password
     }
 
-    // ✅ Registro exitoso
-    navigate("/"); // vuelve al login
-  };
+    await registrarUsuario(data);
+
+    // Registro exitoso
+    navigate("/");
+  } catch (err) {
+    setError(err.message);
+  }
+};
 
   return (
     <div className="container mt-5">
@@ -65,6 +78,14 @@ export default function Register() {
           className="form-control mb-2"
           name="password"
           placeholder="Password"
+          onChange={handleChange}
+        />
+
+                <input
+          type="password"
+          className="form-control mb-2"
+          name="checkpassword"
+          placeholder="Reingrese Password"
           onChange={handleChange}
         />
 
