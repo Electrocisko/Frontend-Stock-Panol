@@ -11,32 +11,36 @@ const items = [
   { to: "/admin/usuarios", label: "Usuarios" },
 
   // 👉 NUEVO
-  { action: "export", label: "Exportar Productos a Excel" },
+  { action: "export", label: "Exportar a Excel" },
 ];
 
 export default function Admin() {
 
-  const handleExport = async () => {
-    try {
-      const blob = await exportarProductos();
-      if (!blob) return;
+const handleExport = async () => {
+  const confirmar = window.confirm("¿Querés exportar el listado a Excel?");
 
-      const url = window.URL.createObjectURL(blob);
+  if (!confirmar) return;
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "productos.xlsx";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+  try {
+    const blob = await exportarProductos();
+    if (!blob) return;
 
-      window.URL.revokeObjectURL(url);
+    const url = window.URL.createObjectURL(blob);
 
-    } catch (error) {
-      console.error(error);
-      alert("Error al exportar Excel");
-    }
-  };
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "productos.xlsx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error(error);
+    alert("Error al exportar a Excel");
+  }
+};
 
   return (
     <div className="container py-5">
@@ -52,7 +56,7 @@ export default function Admin() {
               <div
                 onClick={handleExport}
                 className="card h-100 shadow-sm admin-card"
-                style={{ cursor: "pointer", backgroundColor: "#e8f5e9" }}
+                style={{ cursor: "pointer" }}
               >
                 <div className="card-body d-flex align-items-center justify-content-center text-center">
                   <span className="fw-semibold">
