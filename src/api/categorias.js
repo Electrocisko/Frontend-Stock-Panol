@@ -4,6 +4,13 @@
   "Herrajes",
   "Iluminación",
   "Herramientas",
+  "Pinturas",
+  "Maderas",
+  "Acrílicos",
+  "Insumos",
+  "Embalajes",
+  "Revestimientos",
+  "Metales",
   "Otros"
 ];
 
