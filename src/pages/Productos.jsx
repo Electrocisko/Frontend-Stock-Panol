@@ -45,7 +45,7 @@ export default function Productos({ token, username }) {
 
   return (
     <>
-      <div className="container mt-5">
+      <div  className="container-fluid mt-5 px-4">
         <div className="position-relative mb-4">
           {/* Botón arriba izquierda */}
           <Link
@@ -93,7 +93,7 @@ export default function Productos({ token, username }) {
           {productosFiltrados.map((p) => (
             <div
               key={p.id}
-              className="col-lg-3 col-md-4 col-sm-6"
+             className="col-xl-2 col-lg-3 col-md-4 col-sm-6"
               onClick={() => {
                 if (rol === "OPERARIO") {
                   navigate(`/salida/${p.id}`);
