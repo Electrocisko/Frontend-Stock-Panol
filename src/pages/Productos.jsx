@@ -93,7 +93,7 @@ export default function Productos({ token, username }) {
           {productosFiltrados.map((p) => (
             <div
               key={p.id}
-             className="col-xl-2 col-lg-3 col-md-4 col-sm-6"
+             className="col-lg-3 col-md-4 col-sm-6"
               onClick={() => {
                 if (rol === "OPERARIO") {
                   navigate(`/salida/${p.id}`);
