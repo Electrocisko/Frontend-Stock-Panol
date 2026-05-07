@@ -59,15 +59,22 @@ export const fetchConAuth = async (endpoint, options = {}) => {
     return null;
   }
 
-  // 🔥 errores normales (no rompen sesión)
+  // 🔥 errores normales
   if (!res.ok) {
     let errorMessage = "Error";
 
     try {
       const body = await res.json();
-      errorMessage = body.message || body.detail || errorMessage;
-    // eslint-disable-next-line no-empty
-    } catch {}
+
+      errorMessage =
+        body.message ||
+        body.detail ||
+        body.error ||
+        errorMessage;
+
+    } catch {
+      // si no viene JSON no rompe
+    }
 
     throw new Error(errorMessage);
   }
@@ -75,16 +82,23 @@ export const fetchConAuth = async (endpoint, options = {}) => {
   return res;
 };
 
+// ===============================
 // PRODUCTOS
+// ===============================
+
 export const getProductos = async () => {
   const res = await fetchConAuth("/productos");
+
   if (!res) return null;
+
   return await res.json();
 };
 
 export const getProductoById = async (id) => {
   const res = await fetchConAuth(`/productos/${id}`);
+
   if (!res) return null;
+
   return await res.json();
 };
 
@@ -95,6 +109,7 @@ export const crearProducto = async (data) => {
   });
 
   if (!res) return null;
+
   return await res.json();
 };
 
@@ -105,10 +120,14 @@ export const actualizarProducto = async (id, data) => {
   });
 
   if (!res) return null;
+
   return await res.json();
 };
 
+// ===============================
 // MOVIMIENTOS
+// ===============================
+
 export const registrarEntrada = async (data) => {
   const res = await fetchConAuth("/movimientos/entrada", {
     method: "POST",
@@ -116,7 +135,9 @@ export const registrarEntrada = async (data) => {
   });
 
   if (!res) return null;
-  return await res.json();
+
+  // 🔥 backend devuelve TEXTO
+  return await res.text();
 };
 
 export const registrarSalida = async (data) => {
@@ -126,19 +147,28 @@ export const registrarSalida = async (data) => {
   });
 
   if (!res) return null;
-  return await res.json();
+
+  // 🔥 backend devuelve TEXTO
+  return await res.text();
 };
 
 export const getMovimientos = async () => {
   const res = await fetchConAuth("/movimientos");
+
   if (!res) return null;
+
   return await res.json();
 };
 
+// ===============================
 // USUARIOS
+// ===============================
+
 export const getUsuarios = async () => {
   const res = await fetchConAuth("/usuarios");
+
   if (!res) return null;
+
   return await res.json();
 };
 
@@ -154,23 +184,34 @@ export const registrarUsuario = async (data) => {
   const body = await res.json();
 
   if (!res.ok) {
-    throw new Error(body.message || body.detail || "Error al registrar");
+    throw new Error(
+      body.message ||
+      body.detail ||
+      "Error al registrar"
+    );
   }
 
   return body;
 };
 
 export const resetPassword = async (userId, newPassword) => {
-  const res = await fetchConAuth(`/usuarios/${userId}/reset-password`, {
-    method: "PUT",
-    body: JSON.stringify({ newPassword }),
-  });
+  const res = await fetchConAuth(
+    `/usuarios/${userId}/reset-password`,
+    {
+      method: "PUT",
+      body: JSON.stringify({ newPassword }),
+    }
+  );
 
   if (!res) return null;
+
   return await res.text();
 };
 
+// ===============================
 // PROVEEDORES
+// ===============================
+
 export const crearProveedor = async (data) => {
   const res = await fetchConAuth("/proveedores", {
     method: "POST",
@@ -178,26 +219,31 @@ export const crearProveedor = async (data) => {
   });
 
   if (!res) return null;
+
   return await res.json();
 };
 
 export const getProveedores = async () => {
   const res = await fetchConAuth("/proveedores");
+
   if (!res) return null;
+
   return await res.json();
 };
 
-// EXPORTAR PRODUCTOS (Excel)
+// ===============================
+// EXPORTAR PRODUCTOS
+// ===============================
+
 export const exportarProductos = async () => {
   const res = await fetchConAuth("/productos/exportar", {
     method: "GET",
     headers: {
-      // ⚠️ importante: NO mandar JSON acá
+      // ⚠️ NO mandar JSON acá
     },
   });
 
   if (!res) return null;
 
-  const blob = await res.blob();
-  return blob;
+  return await res.blob();
 };
