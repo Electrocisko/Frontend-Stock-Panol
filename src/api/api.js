@@ -137,7 +137,7 @@ export const registrarEntrada = async (data) => {
   if (!res) return null;
 
   // 🔥 backend devuelve TEXTO
-  return await res.text();
+  return await res.json();
 };
 
 export const registrarSalida = async (data) => {
@@ -148,8 +148,8 @@ export const registrarSalida = async (data) => {
 
   if (!res) return null;
 
-  // 🔥 backend devuelve TEXTO
-  return await res.text();
+  // 🔥 backend devuelve json
+  return await res.json();
 };
 
 export const getMovimientos = async () => {
