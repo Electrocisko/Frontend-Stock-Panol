@@ -31,17 +31,17 @@ export default function Productos({ token, username }) {
 
       return coincideBusqueda && coincideCategoria;
     })
-    .sort((a, b) => {
-      // 🔴 Sin stock primero
-      if (a.sinStock && !b.sinStock) return -1;
-      if (!a.sinStock && b.sinStock) return 1;
+    // .sort((a, b) => {
+    //   // 🔴 Sin stock primero
+    //   if (a.sinStock && !b.sinStock) return -1;
+    //   if (!a.sinStock && b.sinStock) return 1;
 
-      // 🟡 Stock bajo después
-      if (a.stockBajo && !b.stockBajo) return -1;
-      if (!a.stockBajo && b.stockBajo) return 1;
+    //   // 🟡 Stock bajo después
+    //   if (a.stockBajo && !b.stockBajo) return -1;
+    //   if (!a.stockBajo && b.stockBajo) return 1;
 
-      return 0;
-    });
+    //   return 0;
+    // });
 
   return (
     <>

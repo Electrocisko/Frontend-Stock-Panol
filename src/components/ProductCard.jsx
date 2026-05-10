@@ -1,6 +1,8 @@
 import { getOptimizedImage } from "../api/cloudinary";
 
 const ProductCard = ({ p }) => {
+
+  console.log(p)
   return (
     <div
       className="card shadow-sm border-0"

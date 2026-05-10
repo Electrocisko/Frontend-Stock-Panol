@@ -18,15 +18,11 @@ export default function Login({ setToken }) {
         password,
       });
 
-      
-
-      // 🔴 error controlado (tu formato actual)
       if (!res.ok) {
         showToast(res.error || "Error al iniciar sesión", "error");
         return;
       }
 
-      // ✅ éxito
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("rol", res.data.rol);
       localStorage.setItem("nombre", res.data.nombre);
@@ -34,9 +30,7 @@ export default function Login({ setToken }) {
       setToken(res.data.token);
 
       navigate("/productos");
-
     } catch (error) {
-      // 🔥 por si algún día login usa throw
       console.error(error);
       showToast(error.message || "Error inesperado", "error");
     }
@@ -44,15 +38,18 @@ export default function Login({ setToken }) {
 
   return (
     <div
-      className="container d-flex flex-column"
+      className="container d-flex justify-content-center align-items-center"
       style={{ minHeight: "100vh" }}
     >
-      <div className="mt-5">
-        <h2>Login</h2>
+      <div
+        className="w-100"
+        style={{ maxWidth: "400px" }}
+      >
+        <h2 className="text-center mb-4">Login</h2>
 
         <form onSubmit={handleLogin}>
           <input
-            className="form-control mb-2"
+            className="form-control mb-3"
             placeholder="Usuario"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -61,7 +58,7 @@ export default function Login({ setToken }) {
 
           <input
             type="password"
-            className="form-control mb-2"
+            className="form-control mb-3"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -72,13 +69,22 @@ export default function Login({ setToken }) {
             Ingresar
           </button>
         </form>
-      </div>
 
-      <div className="mt-auto mb-3 text-center text-muted">
-        ¿No tenés cuenta?{" "}
-        <Link to="/register" style={{ fontWeight: "bold" }}>
-          Registrate
-        </Link>
+        {/* 🔥 Ahora SIEMPRE visible */}
+        <div className="mt-3 text-center">
+          <span className="text-muted">
+            ¿No tenés cuenta?
+          </span>{" "}
+          <Link
+            to="/register"
+            style={{
+              fontWeight: "bold",
+              textDecoration: "none",
+            }}
+          >
+            Registrate
+          </Link>
+        </div>
       </div>
     </div>
   );
