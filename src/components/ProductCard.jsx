@@ -2,7 +2,7 @@ import { getOptimizedImage } from "../api/cloudinary";
 
 const ProductCard = ({ p }) => {
 
-  console.log(p)
+ 
   return (
     <div
       className="card shadow-sm border-0"
@@ -101,8 +101,9 @@ const ProductCard = ({ p }) => {
                   : "text-success fw-bold"
             }
           >
-            {p.cantidad}
+            {p.cantidad} 
           </span>
+          <span className="text-lowercase"> {p.unidadMedida}</span>
         </div>
       </div>
     </div>
