@@ -34,7 +34,7 @@ export default function Navbar({ setToken }) {
 
         {/* 💻 Menu desktop */}
         <div className="d-none d-md-flex gap-4 align-items-center">
-          
+
           {isAdmin && (
             <NavLink
               to="/admin"
@@ -68,21 +68,25 @@ export default function Navbar({ setToken }) {
             </NavLink>
           )}
 
-
-
-          <span
+          {/* 🔴 Botón logout desktop */}
+          <button
             onClick={logout}
-            className="text-danger"
-            style={{ cursor: "pointer" }}
+            className="btn btn-sm border text-danger"
+            style={{
+              borderColor: "#dee2e6",
+              borderRadius: "8px",
+              padding: "6px 12px",
+              background: "white",
+            }}
           >
-            Logout
-          </span>
+            Cerrar sesión
+          </button>
         </div>
       </div>
 
       {/* 📱 Menu mobile */}
       {open && (
-        <div className="border-top p-3 d-md-none d-flex flex-column gap-3">
+      <div className="border-top p-3 d-md-none d-flex flex-column align-items-center gap-3">
 
           {isAdmin && (
             <NavLink
@@ -112,14 +116,19 @@ export default function Navbar({ setToken }) {
             </NavLink>
           )}
 
-
-          <span
-            onClick={logout}
-            className="text-danger"
-            style={{ cursor: "pointer" }}
-          >
-            Logout
-          </span>
+          {/* 🔴 Botón logout mobile */}
+<button
+  onClick={logout}
+  className="btn btn-sm border text-danger"
+  style={{
+    borderColor: "#dee2e6",
+    borderRadius: "8px",
+    padding: "6px 12px",
+    background: "white",
+  }}
+>
+  Cerrar sesión
+</button>
         </div>
       )}
     </nav>

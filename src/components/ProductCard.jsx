@@ -103,7 +103,7 @@ const ProductCard = ({ p }) => {
           >
             {p.cantidad} 
           </span>
-          <span className="text-lowercase"> {p.unidadMedida}</span>
+          <span> {p.unidadTexto}</span>
         </div>
       </div>
     </div>
