@@ -2,6 +2,7 @@
 
 export const UNIDADES = [
   "UNIDAD",
+  "PLACA",
   "LATA",
   "CAJA",
   "PACK",
@@ -18,6 +19,7 @@ export const UNIDADES = [
 
 export const UNIDADES_LABELS = {
   UNIDAD: "Unidad",
+  PLACA: "Placa",
   LATA: "Lata",
   CAJA: "Caja",
   PACK: "Pack",
