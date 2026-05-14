@@ -2,6 +2,12 @@
 
 export const UNIDADES = [
   "UNIDAD",
+  "LATA",
+  "CAJA",
+  "PACK",
+  "BOLSA",
+  "BIDON",
+  "BALDE",
   "KG",
   "GRAMO",
   "LITRO",
@@ -12,10 +18,16 @@ export const UNIDADES = [
 
 export const UNIDADES_LABELS = {
   UNIDAD: "Unidad",
-  KG: "Kilogramo",
+  LATA: "Lata",
+  CAJA: "Caja",
+  PACK: "Pack",
+  BOLSA: "Bolsa",
+  BIDON: "Bidón",
+  BALDE: "Balde",
+  KG: "kg",
   GRAMO: "Gramo",
   LITRO: "Litro",
-  ML: "Mililitro",
+  ML: "ml",
   METRO: "Metro",
-  CM: "Centímetro"
+  CM: "cm"
 };
