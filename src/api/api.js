@@ -40,7 +40,7 @@ export const login = async (data) => {
 
 // FETCH CON AUTH (centralizado)
 export const fetchConAuth = async (endpoint, options = {}) => {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   const res = await fetch(`${API_URL}${endpoint}`, {
     ...options,
@@ -53,8 +53,9 @@ export const fetchConAuth = async (endpoint, options = {}) => {
 
   // 🔴 SOLO 401 desloguea
   if (res.status === 401) {
-    localStorage.removeItem("token");
-    localStorage.removeItem("rol");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("rol");
+    sessionStorage.removeItem("nombre");
     window.location.href = "/";
     return null;
   }

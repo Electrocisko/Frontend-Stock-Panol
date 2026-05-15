@@ -5,12 +5,12 @@ export default function Navbar({ setToken }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const rol = localStorage.getItem("rol");
+  const rol = sessionStorage.getItem("rol");
   const isAdmin = rol === "ADMIN";
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("rol");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("rol");
     setToken(null);
     navigate("/");
   };

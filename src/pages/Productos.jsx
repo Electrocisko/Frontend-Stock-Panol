@@ -10,8 +10,8 @@ export default function Productos({ token, username }) {
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
   const navigate = useNavigate();
-  const rol = localStorage.getItem("rol");
-  const nombre = localStorage.getItem("nombre");
+  const rol = sessionStorage.getItem("rol");
+  const nombre = sessionStorage.getItem("nombre");
 
   useEffect(() => {
     getProductos(token).then((data) => {

@@ -26,8 +26,8 @@ import ProductoDetalle from "./pages/ProductoDetalle";
 // 🔥 Wrapper para usar location
 function AppContent({ token, setToken }) {
   const location = useLocation();
-  const rol = localStorage.getItem("rol");
-  const username = localStorage.getItem("username");
+  const rol = sessionStorage.getItem("rol");
+  const username = sessionStorage.getItem("username");
 
   // 🔥 Ocultar navbar en login/register
   const hideNavbar =
