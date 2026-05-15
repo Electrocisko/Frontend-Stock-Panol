@@ -22,7 +22,8 @@ export default function EditarProducto() {
     ubicacion: "",
     cantidad: 0,
     proveedorId: "",
-    urlImagen: "", // 🔥 IMPORTANTE
+    urlImagen: "",
+    activo: true,
   });
 
   const [proveedores, setProveedores] = useState([]);
@@ -46,7 +47,8 @@ export default function EditarProducto() {
         ubicacion: data.ubicacion || "",
         cantidad: data.cantidad || 0,
         proveedorId: data.proveedorId || "",
-        urlImagen: data.urlImagen || "", // 🔥 clave
+        urlImagen: data.urlImagen || "",
+        activo: data.activo !== undefined ? data.activo : true,
       });
 
       setPreview(data.urlImagen || null);

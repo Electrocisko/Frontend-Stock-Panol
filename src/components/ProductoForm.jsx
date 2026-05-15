@@ -46,7 +46,6 @@ const ProductoForm = ({
       <div className="row">
         {/* 🟢 FORM */}
         <div className="col-md-6">
-
           <input
             name="nombre"
             className="form-control mb-2"
@@ -120,7 +119,6 @@ const ProductoForm = ({
 
           <div className="mb-3">
             <div className="d-flex gap-3">
-
               <div className="w-100">
                 <label className="form-label small text-muted">
                   Stock mínimo
@@ -151,6 +149,24 @@ const ProductoForm = ({
                 />
               </div>
 
+              <div className="form-check form-switch mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="activo"
+                  checked={form.activo ?? true}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      activo: e.target.checked,
+                    })
+                  }
+                />
+
+                <label className="form-check-label" htmlFor="activo">
+                  {form.activo ? "Producto activo" : "Producto desactivado"}
+                </label>
+              </div>
             </div>
           </div>
 

@@ -15,6 +15,7 @@ export default function CrearProducto() {
     ubicacion: "",
     cantidad: "",
     proveedorId: "",
+    activo: true,
   });
 
   const [proveedores, setProveedores] = useState([]);
@@ -56,6 +57,7 @@ export default function CrearProducto() {
         ubicacion: "",
         cantidad: 0,
         proveedorId: "",
+        activo: true,
       });
 
       setFile(null);
