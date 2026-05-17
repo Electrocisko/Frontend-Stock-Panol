@@ -153,25 +153,12 @@ export default function ProductosAdmin() {
 
                 {/* 🔥 ACCIONES */}
 
-                <td className="d-flex gap-2">
-                  <Link
-                    to={`/admin/productos/${p.id}`}
-                    className="btn btn-sm btn-outline-info"
-                  >
-                    Detalle Producto
-                  </Link>
+                <td>
                   <button
                     className="btn btn-sm btn-outline-primary"
                     onClick={() => navigate(`/admin/editar/${p.id}`)}
                   >
-                    Editar
-                  </button>
-
-                  <button
-                    className="btn btn-sm btn-outline-success"
-                    onClick={() => navigate(`/movimiento/${p.id}`)}
-                  >
-                    Actualizar Stock
+                    Abrir
                   </button>
                 </td>
               </tr>

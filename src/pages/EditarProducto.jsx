@@ -70,15 +70,12 @@ export default function EditarProducto() {
 
       await actualizarProducto(id, {
         ...form,
-        proveedorId: form.proveedorId
-          ? Number(form.proveedorId)
-          : null,
+        proveedorId: form.proveedorId ? Number(form.proveedorId) : null,
         urlImagen: imageUrl || null,
       });
 
       alert("Producto actualizado");
       navigate("/admin/productos");
-
     } catch (error) {
       console.error(error);
       alert(error.message);
@@ -88,7 +85,6 @@ export default function EditarProducto() {
   return (
     <div className="container mt-5">
       <div className="position-relative mb-4">
-
         <Link
           to="/admin"
           className="btn btn-outline-secondary btn-sm position-absolute start-0 top-0"
@@ -97,6 +93,15 @@ export default function EditarProducto() {
         </Link>
 
         <h2 className="text-center m-0">Editar</h2>
+      </div>
+
+      <div className="d-flex justify-content-end mb-3">
+        <button
+          className="btn btn-outline-primary"
+          onClick={() => navigate(`/movimiento/${id}`)}
+        >
+          Registrar Nuevo Movimiento
+        </button>
       </div>
 
       <ProductoForm
