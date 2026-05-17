@@ -7,6 +7,7 @@ import {
 } from "../api/api";
 import { subirImagen } from "../api/cloudinary";
 import ProductoForm from "../components/ProductoForm";
+ 
 
 export default function EditarProducto() {
   const { id } = useParams();
@@ -91,8 +92,9 @@ export default function EditarProducto() {
         >
           ← Volver
         </Link>
-
-        <h2 className="text-center m-0">Editar</h2>
+<h2 className="text-center m-0">
+  Editar: {form.nombre || "Producto"}
+</h2>
       </div>
 
       <div className="d-flex justify-content-end mb-3">
