@@ -95,6 +95,16 @@ export const getProductos = async () => {
   return await res.json();
 };
 
+export const getProductosInactivos = async () => {
+  const res = await fetchConAuth(
+    "/productos/inactivos"
+  );
+
+  if (!res) return null;
+
+  return await res.json();
+};
+
 export const getProductoById = async (id) => {
   const res = await fetchConAuth(`/productos/${id}`);
 

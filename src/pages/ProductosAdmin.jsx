@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProductos } from "../api/api";
+import { getProductos, getProductosInactivos } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { CATEGORIAS } from "../api/categorias";
 import { Link } from "react-router-dom";
@@ -8,13 +8,20 @@ export default function ProductosAdmin() {
   const [productos, setProductos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
+  const [mostrarInactivos, setMostrarInactivos] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getProductos().then((data) => {
+    const cargarProductos = async () => {
+      const data = mostrarInactivos
+        ? await getProductosInactivos()
+        : await getProductos();
+
       if (data) setProductos(data);
-    });
-  }, []);
+    };
+
+    cargarProductos();
+  }, [mostrarInactivos]);
 
   const productosFiltrados = productos
     .filter((p) => {
@@ -53,6 +60,25 @@ export default function ProductosAdmin() {
 
         {/* Título centrado */}
         <h2 className="text-center m-0">Editar Productos</h2>
+        <div className="d-flex gap-2 mb-3">
+          <button
+            className={`btn ${
+              !mostrarInactivos ? "btn-dark" : "btn-outline-dark"
+            }`}
+            onClick={() => setMostrarInactivos(false)}
+          >
+            Productos Activos
+          </button>
+
+          <button
+            className={`btn ${
+              mostrarInactivos ? "btn-danger" : "btn-outline-danger"
+            }`}
+            onClick={() => setMostrarInactivos(true)}
+          >
+            Productos Inactivos
+          </button>
+        </div>
       </div>
 
       <div className="row mb-3 g-2">
