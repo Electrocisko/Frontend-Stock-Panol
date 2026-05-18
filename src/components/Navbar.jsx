@@ -87,7 +87,7 @@ export default function Navbar({ setToken }) {
               onClick={() => setOpen(false)}
               className="text-dark text-decoration-none"
             >
-              Admin
+              Panel
             </NavLink>
           )}
 
