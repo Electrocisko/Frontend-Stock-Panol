@@ -40,7 +40,7 @@ export default function Navbar({ setToken }) {
               to="/admin"
               className="text-dark text-decoration-none"
             >
-              Admin
+              Panel
             </NavLink>
           )}
 
@@ -55,19 +55,7 @@ export default function Navbar({ setToken }) {
             Productos
           </NavLink>
 
-          {isAdmin && (
-            <NavLink
-              to="/movimientos"
-              className={({ isActive }) =>
-                isActive
-                  ? "fw-bold text-dark text-decoration-none"
-                  : "text-secondary text-decoration-none"
-              }
-            >
-              Movimientos
-            </NavLink>
-          )}
-
+    
           {/* 🔴 Botón logout desktop */}
           <button
             onClick={logout}

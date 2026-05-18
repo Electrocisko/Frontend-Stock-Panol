@@ -3,11 +3,12 @@ import { exportarProductos } from "../api/api";
 
 const items = [
   { to: "/admin/crear", label: "Ingresar Producto Nuevo" },
-  { to: "/productos", label: "Ingreso / Salida de Productos" },
+  { to: "/productos", label: "Actualizar Stock" },
+   { to: "/admin/productos", label: "Editar Productos" },
   { to: "/movimientos", label: "Ver Movimientos" },
   { to: "/admin/stock-bajo", label: "Stock Bajo por Proveedor" },
   { to: "/admin/proveedores", label: "Registrar Proveedor" },
-  { to: "/admin/productos", label: "Editar Productos" },
+ 
   { to: "/admin/usuarios", label: "Usuarios" },
 
   // 👉 NUEVO
