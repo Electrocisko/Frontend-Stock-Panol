@@ -99,15 +99,7 @@ export default function Navbar({ setToken }) {
             Productos
           </NavLink>
 
-          {isAdmin && (
-            <NavLink
-              to="/movimientos"
-              onClick={() => setOpen(false)}
-              className="text-dark text-decoration-none"
-            >
-              Movimientos
-            </NavLink>
-          )}
+     
 
           {/* 🔴 Botón logout mobile */}
 <button
