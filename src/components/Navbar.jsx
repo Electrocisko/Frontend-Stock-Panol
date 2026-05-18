@@ -5,15 +5,20 @@ export default function Navbar({ setToken }) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const rol = sessionStorage.getItem("rol");
+  const rol = localStorage.getItem("rol");
   const isAdmin = rol === "ADMIN";
 
   const logout = () => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("rol");
+    // 💡 Limpieza absoluta de todo el ecosistema de autenticación local
+    localStorage.removeItem("token");
+    localStorage.removeItem("rol");
+    localStorage.removeItem("nombre");
+    localStorage.removeItem("token_expires");
+    
     setToken(null);
     navigate("/");
   };
+
 
   return (
     <nav className="border-bottom bg-white">

@@ -26,8 +26,10 @@ import ProductoDetalle from "./pages/ProductoDetalle";
 // 🔥 Wrapper para usar location
 function AppContent({ token, setToken }) {
   const location = useLocation();
-  const rol = sessionStorage.getItem("rol");
-  const username = sessionStorage.getItem("username");
+  const rol = localStorage.getItem("rol");
+  
+  // 💡 Corregido: En Login guardás "nombre", acá leemos "nombre"
+  const nombre = localStorage.getItem("nombre"); 
 
   // 🔥 Ocultar navbar en login/register
   const hideNavbar =
@@ -57,7 +59,7 @@ function AppContent({ token, setToken }) {
           path="/productos"
           element={
             token ? (
-              <Productos token={token} username={username} />
+              <Productos token={token} username={nombre} /> // Pasamos el nombre correcto
             ) : (
               <Navigate to="/" />
             )
@@ -146,9 +148,11 @@ function AppContent({ token, setToken }) {
           }
         />
 
-        <Route path="/admin/productos/:id" element={<ProductoDetalle />} />
-
-        
+        {/* 💡 Agregado chequeo de token para que no rompa si entran directo por URL */}
+        <Route 
+          path="/admin/productos/:id" 
+          element={token ? <ProductoDetalle /> : <Navigate to="/" />} 
+        />
 
         {/* 🔥 fallback */}
         <Route path="*" element={<Navigate to="/" />} />
@@ -158,7 +162,21 @@ function AppContent({ token, setToken }) {
 }
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(() => {
+    // ⏱️ Validación de arranque para la PWA móvil
+    const tokenGuardado = localStorage.getItem("token");
+    const exp = localStorage.getItem("token_expires");
+    
+    if (tokenGuardado && exp && Date.now() > parseInt(exp)) {
+      // Pasó el tiempo límite: Limpiamos todo de inmediato
+      localStorage.removeItem("token");
+      localStorage.removeItem("rol");
+      localStorage.removeItem("nombre");
+      localStorage.removeItem("token_expires");
+      return null;
+    }
+    return tokenGuardado;
+  });
 
   return (
     <BrowserRouter>
@@ -168,3 +186,4 @@ function App() {
 }
 
 export default App;
+

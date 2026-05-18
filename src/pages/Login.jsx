@@ -23,9 +23,14 @@ export default function Login({ setToken }) {
         return;
       }
 
-      sessionStorage.setItem("token", res.data.token);
-      sessionStorage.setItem("rol", res.data.rol);
-      sessionStorage.setItem("nombre", res.data.nombre);
+      // Guardado de credenciales nativas
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("rol", res.data.rol);
+      localStorage.setItem("nombre", res.data.nombre);
+
+      // ⏱️ CLAVE PARA MÓVIL: Guardamos cuándo expira (Ej: 8 horas)
+      const expiracion = Date.now() + (8 * 60 * 60 * 1000);
+      localStorage.setItem("token_expires", expiracion.toString());
 
       setToken(res.data.token);
 
@@ -35,6 +40,7 @@ export default function Login({ setToken }) {
       showToast(error.message || "Error inesperado", "error");
     }
   };
+
 
   return (
     <div
