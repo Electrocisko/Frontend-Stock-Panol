@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   getProductoById,
   registrarEntrada,
   registrarSalida,
 } from "../api/api";
+
 
 export default function Movimiento({ token }) {
   const { id } = useParams();
@@ -62,9 +63,19 @@ export default function Movimiento({ token }) {
           border: "1px solid #e9ecef",
         }}
       >
-        <h2 className="mb-3 mb-md-4 fs-5 fs-md-3 text-center">
-          Registrar Movimiento
-        </h2>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+  <Link
+    to="/productos"
+    className="btn btn-outline-secondary btn-sm"
+  >
+    ← Volver
+  </Link>
+
+  <h2 className="m-0 fs-5 text-center flex-grow-1">
+    Registrar Movimiento
+  </h2>
+</div>
+    
 
         <div className="row align-items-center">
           <div className="col-12 col-md-6">
