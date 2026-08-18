@@ -1,58 +1,69 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   getProductoById,
   registrarEntrada,
   registrarSalida,
+  getProyectosEnCurso,
 } from "../api/api";
-
 
 export default function Movimiento({ token }) {
   const { id } = useParams();
 
   const [producto, setProducto] = useState(null);
   const [tipo, setTipo] = useState("SALIDA");
-  const [cantidad, setCantidad] = useState(0);
+  const [cantidad, setCantidad] = useState("");
   const [motivo, setMotivo] = useState("");
+  const [proyectos, setProyectos] = useState([]);
+  const [proyectoId, setProyectoId] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    getProductoById(id, token).then(setProducto);
-  }, [id, token]);
+    getProductoById(id).then(setProducto);
+
+    getProyectosEnCurso().then((data) => {
+      setProyectos(data || []);
+    });
+  }, [id]);
 
   if (!producto) {
     return <p className="text-center mt-5">Cargando...</p>;
   }
 
-  const handleSubmit = async () => {
-    try {
-      const data = {
-        productoId: id,
-        cantidad,
-        motivo,
-      };
+ const handleSubmit = async () => {
+  try {
 
-      if (tipo === "ENTRADA") {
-        await registrarEntrada(data, token);
-      } else {
-        await registrarSalida(data, token);
-      }
+    const data = {
+      productoId: id,
+      cantidad: Number(cantidad),
+      motivo,
+    };
 
-      alert("Movimiento registrado");
-
-      // 🔥 actualizar producto visualmente
-      const actualizado = await getProductoById(id, token);
-      setProducto(actualizado);
-
-      // 🔥 limpiar campos
-      setCantidad(0);
-      setMotivo("");
-
-    } catch (error) {
-      console.error(error);
-
-      alert(error.message || "Error al registrar movimiento");
+    if (tipo === "ENTRADA") {
+      await registrarEntrada(data);
+    } else {
+      await registrarSalida({
+        ...data,
+        proyectoId:
+          proyectoId === ""
+            ? null
+            : Number(proyectoId),
+      });
     }
-  };
+
+    const actualizado = await getProductoById(id);
+
+    alert(
+      `Movimiento registrado correctamente.\nStock actual: ${actualizado.cantidad}`
+    );
+
+    navigate("/productos");
+
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Error al registrar movimiento");
+  }
+};
 
   return (
     <div className="container mt-3 mt-md-5">
@@ -64,34 +75,28 @@ export default function Movimiento({ token }) {
         }}
       >
         <div className="d-flex justify-content-between align-items-center mb-3">
-  <Link
-    to="/productos"
-    className="btn btn-outline-secondary btn-sm"
-  >
-    ← Volver
-  </Link>
+          <Link to="/productos" className="btn btn-outline-secondary btn-sm">
+            ← Volver
+          </Link>
 
-  <h2 className="m-0 fs-5 text-center flex-grow-1">
-    Registrar Movimiento
-  </h2>
-</div>
-    
+          <h2 className="m-0 fs-5 text-center flex-grow-1">
+            Registrar Movimiento
+          </h2>
+        </div>
 
         <div className="row align-items-center">
           <div className="col-12 col-md-6">
             <h4 className="fs-6 fs-md-4">{producto.nombre}</h4>
 
             <p className="mb-1 small">
-              <strong>Código: ppp</strong> {producto.codigo}
+              <strong>Código: </strong> {producto.codigo}
             </p>
 
             <p className="mb-1 small">
               <strong>Stock actual:</strong>{" "}
               <span
                 className={
-                  producto.cantidad < producto.stockMinimo
-                    ? "text-danger"
-                    : ""
+                  producto.cantidad < producto.stockMinimo ? "text-danger" : ""
                 }
               >
                 {producto.cantidad}
@@ -121,14 +126,19 @@ export default function Movimiento({ token }) {
       </div>
 
       <div className="mt-3 mt-md-4">
-
         <div className="mb-2 mb-md-3">
           <label className="form-label small">Tipo</label>
 
           <select
             className="form-control form-control-sm"
             value={tipo}
-            onChange={(e) => setTipo(e.target.value)}
+            onChange={(e) => {
+              const nuevoTipo = e.target.value;
+              setTipo(nuevoTipo);
+              if (nuevoTipo === "ENTRADA") {
+                setProyectoId("");
+              }
+            }}
           >
             <option value="SALIDA">Salida</option>
             <option value="ENTRADA">Entrada</option>
@@ -146,6 +156,26 @@ export default function Movimiento({ token }) {
           />
         </div>
 
+        {tipo === "SALIDA" && (
+          <div className="mb-2 mb-md-3">
+            <label className="form-label small">Proyecto / Destino</label>
+
+            <select
+              className="form-select form-select-sm"
+              value={proyectoId}
+              onChange={(e) => setProyectoId(e.target.value)}
+            >
+              <option value="">Uso taller</option>
+
+              {proyectos.map((proyecto) => (
+                <option key={proyecto.id} value={proyecto.id}>
+                  {proyecto.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <div className="mb-2 mb-md-3">
           <label className="form-label small">Motivo</label>
 
@@ -156,10 +186,7 @@ export default function Movimiento({ token }) {
           />
         </div>
 
-        <button
-          className="btn btn-dark w-100 mt-2"
-          onClick={handleSubmit}
-        >
+        <button className="btn btn-dark w-100 mt-2" onClick={handleSubmit}>
           Confirmar Movimiento
         </button>
       </div>

@@ -65,7 +65,7 @@ export default function Salida({ token }) {
         <div className="text-center mb-4">
           <div className="d-flex align-items-center justify-content-center gap-4">
             <h4>
-              {producto.nombre} - {producto.codigo}
+              {producto.nombre}
             </h4>
             {producto.urlImagen && (
               <img
@@ -107,7 +107,7 @@ export default function Salida({ token }) {
 
         {/* 🏗️ PROYECTO / DESTINO */}
         <div className="mb-3">
-          <label className="form-label">Proyecto / Destino</label>
+          <label className="form-label">Proyecto </label>
 
           <select
             className="form-select"
