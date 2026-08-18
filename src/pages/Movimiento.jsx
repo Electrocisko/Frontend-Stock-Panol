@@ -82,7 +82,7 @@ export default function Movimiento({ token }) {
             <h4 className="fs-6 fs-md-4">{producto.nombre}</h4>
 
             <p className="mb-1 small">
-              <strong>Código:</strong> {producto.codigo}
+              <strong>Código: ppp</strong> {producto.codigo}
             </p>
 
             <p className="mb-1 small">

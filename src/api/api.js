@@ -197,6 +197,15 @@ export const resetPassword = async (userId, newPassword) => {
 };
 
 // ===============================
+// PROYECTOS
+// ===============================
+export const getProyectosEnCurso = async () => {
+  const res = await fetchConAuth("/proyectos/en-curso");
+  if (!res) return null;
+  return await res.json();
+};
+
+// ===============================
 // PROVEEDORES
 // ===============================
 export const crearProveedor = async (data) => {
