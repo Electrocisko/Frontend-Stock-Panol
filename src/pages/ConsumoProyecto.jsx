@@ -63,7 +63,18 @@ const cargarDatos = async () => {
       
       </div>
 
-        <p> Estado: {proyecto?.estado}</p>
+  <p>
+  Estado:{" "}
+  {proyecto?.estado === "EN_CURSO" ? (
+    <span>
+      En curso
+    </span>
+  ) : (
+    <span >
+      Finalizado
+    </span>
+  )}
+</p>
 
       {consumos.length === 0 ? (
         <p className="text-center text-muted">
@@ -104,10 +115,11 @@ const cargarDatos = async () => {
   </p>
 ) : (
   <div className="table-responsive">
-    <table className="table table-bordered align-middle">
+ <table className="table table-bordered align-middle">
       <thead>
         <tr>
           <th>Fecha</th>
+          <th>Tipo</th>
           <th>Producto</th>
           <th>Cantidad</th>
           <th>Usuario</th>
@@ -120,6 +132,18 @@ const cargarDatos = async () => {
           <tr key={mov.id}>
             <td>
               {new Date(mov.fecha).toLocaleString("es-AR")}
+            </td>
+
+            <td>
+              {mov.tipo === "SALIDA" ? (
+                <span className="badge bg-danger">
+                  Salida
+                </span>
+              ) : (
+                <span className="badge bg-success">
+                  Entrada
+                </span>
+              )}
             </td>
 
             <td>{mov.producto}</td>
