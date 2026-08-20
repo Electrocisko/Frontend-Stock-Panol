@@ -22,14 +22,17 @@ import ProductosAdmin from "./pages/ProductosAdmin";
 import EditarProducto from "./pages/EditarProducto";
 import UsuariosAdmin from "./pages/UsuariosAdmin";
 import ProductoDetalle from "./pages/ProductoDetalle";
+import ProyectosAdmin from "./pages/ProyectosAdmin";
+import NuevoProyecto from "./pages/NuevoProyecto";
+import ConsumoProyecto from "./pages/ConsumoProyecto";
 
 // 🔥 Wrapper para usar location
 function AppContent({ token, setToken }) {
   const location = useLocation();
   const rol = localStorage.getItem("rol");
-  
+
   // 💡 Corregido: En Login guardás "nombre", acá leemos "nombre"
-  const nombre = localStorage.getItem("nombre"); 
+  const nombre = localStorage.getItem("nombre");
 
   // 🔥 Ocultar navbar en login/register
   const hideNavbar =
@@ -149,13 +152,22 @@ function AppContent({ token, setToken }) {
         />
 
         {/* 💡 Agregado chequeo de token para que no rompa si entran directo por URL */}
-        <Route 
-          path="/admin/productos/:id" 
-          element={token ? <ProductoDetalle /> : <Navigate to="/" />} 
+        <Route
+          path="/admin/productos/:id"
+          element={token ? <ProductoDetalle /> : <Navigate to="/" />}
         />
+
+        <Route path="/admin/proyectos" element={<ProyectosAdmin />} />
 
         {/* 🔥 fallback */}
         <Route path="*" element={<Navigate to="/" />} />
+
+        <Route path="/admin/proyectos/nuevo" element={<NuevoProyecto />} />
+
+        <Route
+          path="/admin/proyectos/:id/consumo"
+          element={<ConsumoProyecto />}
+        />
       </Routes>
     </>
   );
@@ -166,7 +178,7 @@ function App() {
     // ⏱️ Validación de arranque para la PWA móvil
     const tokenGuardado = localStorage.getItem("token");
     const exp = localStorage.getItem("token_expires");
-    
+
     if (tokenGuardado && exp && Date.now() > parseInt(exp)) {
       // Pasó el tiempo límite: Limpiamos todo de inmediato
       localStorage.removeItem("token");
@@ -186,4 +198,3 @@ function App() {
 }
 
 export default App;
-

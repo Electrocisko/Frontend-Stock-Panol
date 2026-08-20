@@ -8,10 +8,8 @@ const items = [
   { to: "/movimientos", label: "Ver Movimientos" },
   { to: "/admin/stock-bajo", label: "Stock Bajo por Proveedor" },
   { to: "/admin/proveedores", label: "Registrar Proveedor" },
- 
   { to: "/admin/usuarios", label: "Usuarios" },
-
-  // 👉 NUEVO
+  { to: "/admin/proyectos", label: "Proyectos" },
   { action: "export", label: "Exportar a Excel" },
 ];
 

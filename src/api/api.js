@@ -234,3 +234,68 @@ export const exportarProductos = async () => {
   if (!res) return null;
   return await res.blob();
 };
+
+// ===============================
+// EXPORTAR PROYECTOS
+// ===============================
+export const getProyectos = async () => {
+  const res = await fetchConAuth("/proyectos");
+  if (!res) return null;
+  return await res.json();
+};
+
+
+// ===============================
+// CREAR PROYECTOS
+// ===============================
+export const crearProyecto = async (data) => {
+  const res = await fetchConAuth("/proyectos", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+
+  if (!res) return null;
+  return await res.json();
+};
+
+// ===============================
+// ACTUALIZAR ESTADO DE PROYECTOS
+// ===============================
+export const actualizarEstadoProyecto = async (id, estado) => {
+  const res = await fetchConAuth(`/proyectos/${id}/estado`, {
+    method: "PUT",
+    body: JSON.stringify(estado),
+  });
+
+  if (!res) return null;
+  return await res.json();
+};
+
+
+// ===============================
+// OBTENER CONSUMO DE PROYECTO
+// ===============================
+export const getConsumoProyecto = async (id) => {
+  const res = await fetchConAuth(
+    `/movimientos/proyecto/${id}/consumo`
+  );
+
+  if (!res) return null;
+  return await res.json();
+};
+
+
+// ===============================
+// OBTENER PROYECTO POR ID
+// ===============================
+export const getProyectoById = async (id) => {
+  const res = await fetchConAuth(`/proyectos/${id}`);
+  if (!res) return null;
+  return await res.json();
+};
+
+export const getMovimientosPorProyecto = async (id) => {
+  const res = await fetchConAuth(`/movimientos/proyecto/${id}`);
+  if (!res) return null;
+  return await res.json();
+};
