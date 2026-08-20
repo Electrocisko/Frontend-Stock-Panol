@@ -34,21 +34,19 @@ export default function Movimiento({ token }) {
   try {
 
     const data = {
-      productoId: id,
+      productoId: Number(id),
       cantidad: Number(cantidad),
       motivo,
+      proyectoId:
+        proyectoId === ""
+          ? null
+          : Number(proyectoId),
     };
 
     if (tipo === "ENTRADA") {
       await registrarEntrada(data);
     } else {
-      await registrarSalida({
-        ...data,
-        proyectoId:
-          proyectoId === ""
-            ? null
-            : Number(proyectoId),
-      });
+      await registrarSalida(data);
     }
 
     const actualizado = await getProductoById(id);
@@ -133,11 +131,8 @@ export default function Movimiento({ token }) {
             className="form-control form-control-sm"
             value={tipo}
             onChange={(e) => {
-              const nuevoTipo = e.target.value;
-              setTipo(nuevoTipo);
-              if (nuevoTipo === "ENTRADA") {
-                setProyectoId("");
-              }
+              setTipo(e.target.value);
+              setProyectoId("");
             }}
           >
             <option value="SALIDA">Salida</option>
@@ -156,7 +151,7 @@ export default function Movimiento({ token }) {
           />
         </div>
 
-        {tipo === "SALIDA" && (
+       
           <div className="mb-2 mb-md-3">
             <label className="form-label small">Proyecto / Destino</label>
 
@@ -174,7 +169,7 @@ export default function Movimiento({ token }) {
               ))}
             </select>
           </div>
-        )}
+        
 
         <div className="mb-2 mb-md-3">
           <label className="form-label small">Motivo</label>
